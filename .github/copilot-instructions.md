@@ -260,8 +260,7 @@ docker compose up -d
 
 ### Golem Network
 Golem provider installed (`golemsp` + `yagna` in `~/.local/bin/`). Testnet initialized.
-Known issue: golemsp 0.17.6 crashes (exit 11) after connecting — upstream bug.
-Workaround: re-run `curl -sSf https://join.golem.network/as-provider | bash` when they release a fix.
+Golem running ✅. Fix was: user must be in `kvm` group (`sudo usermod -aG kvm yuri`) then run via `sg kvm -c "golemsp run"`.
 Node configured: 8 cores, 16GiB RAM, 100GiB disk, node name `yuri-ativadata-node`.
 
 ### ComfyUI
