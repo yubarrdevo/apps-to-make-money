@@ -323,10 +323,13 @@ sg kvm -c "golemsp run" &
 
 ## ✅ Checklist de Ativação
 
-- [ ] **1. Telegram** — @BotFather → /start no bot → pegar chat_id correto → `.gpu-scheduler.env`
-- [ ] **2. Resend** — resend.com → verificar `ativadata.com` → API key → n8n variable
-- [ ] **3. Stripe** — criar produtos → webhook → credencial no n8n
-- [ ] **4. money4band** — criar 7 contas → preencher .env → python3 main.py → docker compose up -d
+- [x] **1. Telegram** — token + chat_id configurados em `.gpu-scheduler.env` e Infisical
+- [x] **2. Resend** — `ativadata.com` ✅ + `ativadata.com.br` ✅ verificados → API keys no n8n + Infisical
+- [x] **3. Stripe** — produtos R$97/297/597 criados → payment links → webhook → n8n ativo
+- [x] **3.1 Secrets** — Infisical configurado, sync automático 3h/dia, zero secret no git
+- [x] **3.2 Stripe CLI + SDK + MCP** — instalados e configurados
+- [x] **3.3 n8n workflow** — LLM Client Auto-Provisioning **ATIVO** (Stripe → API Key → Email)
+- [ ] **4. money4band** — EarnApp ✅ rodando (aguarda verificação Discord) | Honeygain ✅ rodando | demais plataformas pendentes
 - [ ] **5. Landing page** — `ativadata.com` com planos e links Stripe
 - [ ] **6. Primeiro post LinkedIn** — copiar template da seção 2.1
 - [ ] **7. Primeiro gig no 99freelas** — copiar template da seção 2.2
@@ -350,8 +353,11 @@ sg kvm -c "golemsp run" &
 | MoneyPrinter (vídeos) | http://localhost:8001 | ✅ Online |
 | Ollama (modelos locais) | interno | ✅ Online |
 | Golem (compute descentralizado) | mainnet | ✅ Publicando ofertas |
-| ComfyUI (imagens IA) | http://localhost:8188 | ⏳ Aguardando start |
-| Bandwidth sharing | — | ❌ Precisa de credenciais |
+| ComfyUI (imagens IA) | http://localhost:8188 | ✅ Online |
+| EarnApp (bandwidth) | — | ⏳ Aguarda verificação Discord |
+| Honeygain (bandwidth) | — | ✅ Rodando |
+| Stripe → n8n provisioning | automático | ✅ Ativo |
+| Infisical (secrets) | app.infisical.com | ✅ Sync diário 3h |
 
 ---
 
