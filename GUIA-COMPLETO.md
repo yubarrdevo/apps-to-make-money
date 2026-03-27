@@ -329,7 +329,10 @@ sg kvm -c "golemsp run" &
 - [x] **3.1 Secrets** — Infisical configurado, sync automático 3h/dia, zero secret no git
 - [x] **3.2 Stripe CLI + SDK + MCP** — instalados e configurados
 - [x] **3.3 n8n workflow** — LLM Client Auto-Provisioning **ATIVO** (Stripe → API Key → Email)
-- [ ] **4. money4band** — EarnApp ✅ rodando (aguarda verificação Discord) | Honeygain ✅ rodando | demais plataformas pendentes
+- [x] **4. money4band** — EarnApp ✅ | Honeygain ✅ | IPRoyal Pawns ✅ | Repocket ✅ | PacketStream ⏳ (aguarda IP residencial) | EarnApp ⏳ (aguarda verificação Discord)
+- [x] **4.1 vLLM** — Qwen2.5-14B-AWQ rodando na GPU (RTX 3060 12GB exclusivo) | Ollama no CPU (modelos gratuitos)
+- [x] **4.2 Cloudflare tunnel** — `api.ativadata.com` + `llm.ativadata.com` → LiteLLM porta 4000
+- [x] **4.3 Boot persistence** — NVIDIA modules, Docker restart policies, Ollama CPU-only todos persistentes
 - [ ] **5. Landing page** — `ativadata.com` com planos e links Stripe
 - [ ] **6. Primeiro post LinkedIn** — copiar template da seção 2.1
 - [ ] **7. Primeiro gig no 99freelas** — copiar template da seção 2.2
