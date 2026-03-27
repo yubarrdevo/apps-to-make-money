@@ -1,0 +1,125 @@
+{
+  "name": "Daily Video Content Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 10 * * *" }]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 10AM SP",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4000/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $env.LITELLM_MASTER_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "fast"
+            },
+            {
+              "name": "messages",
+              "value": "[{\"role\":\"user\",\"content\":\"Generate 3 YouTube Shorts video topics for today. Topics should be about making money online, AI tools, or passive income. Each topic must be viral, clickbait-friendly, and under 60 chars. Return ONLY a JSON array of strings, nothing else. Example: [\\\"topic1\\\",\\\"topic2\\\",\\\"topic3\\\"]\"}]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "generate-topics",
+      "name": "Generate Topics (LLM)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.first().json.choices[0].message.content.trim();\nlet topics;\ntry {\n  topics = JSON.parse(content);\n} catch(e) {\n  // extract JSON array from response if wrapped in text\n  const match = content.match(/\\[.*?\\]/s);\n  topics = match ? JSON.parse(match[0]) : ['AI passive income 2025'];\n}\nreturn topics.map(t => ({ json: { topic: t } }));"
+      },
+      "id": "parse-topics",
+      "name": "Parse Topics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/api/generate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "videoSubject", "value": "={{ $json.topic }}" },
+            { "name": "model", "value": "llama3.1:8b" },
+            { "name": "aiModel", "value": "llama3.1:8b" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "submit-video-job",
+      "name": "Submit to MoneyPrinter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "amount": 300,
+        "unit": "seconds"
+      },
+      "id": "wait-5min",
+      "name": "Wait 5 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "url": "=http://host.docker.internal:8080/api/jobs/{{ $('Submit to MoneyPrinter').item.json.jobId }}",
+        "options": {}
+      },
+      "id": "check-job-status",
+      "name": "Check Job Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "=🎬 Video generated!\n\nTopic: {{ $('Parse Topics').item.json.topic }}\nJob: {{ $('Submit to MoneyPrinter').item.json.jobId }}\nStatus: {{ $json.job.state }}\n\nCheck MoneyPrinter UI: https://moneyprinter.ativadata.com.br",
+        "additionalFields": {}
+      },
+      "id": "telegram-notify",
+      "name": "Telegram Notify",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1560, 300]
+    }
+  ],
+  "connections": {
+    "Daily 10AM SP": { "main": [[{ "node": "Generate Topics (LLM)", "type": "main", "index": 0 }]] },
+    "Generate Topics (LLM)": { "main": [[{ "node": "Parse Topics", "type": "main", "index": 0 }]] },
+    "Parse Topics": { "main": [[{ "node": "Submit to MoneyPrinter", "type": "main", "index": 0 }]] },
+    "Submit to MoneyPrinter": { "main": [[{ "node": "Wait 5 min", "type": "main", "index": 0 }]] },
+    "Wait 5 min": { "main": [[{ "node": "Check Job Status", "type": "main", "index": 0 }]] },
+    "Check Job Status": { "main": [[{ "node": "Telegram Notify", "type": "main", "index": 0 }]] }
+  },
+  "active": true,
+  "settings": { "timezone": "America/Sao_Paulo" }
+}

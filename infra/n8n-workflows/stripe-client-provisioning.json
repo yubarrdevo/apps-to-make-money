@@ -1,0 +1,103 @@
+{
+  "name": "LLM Client Auto-Provisioning (Stripe → API Key → Email)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-webhook",
+        "options": {}
+      },
+      "id": "stripe-webhook",
+      "name": "Stripe Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "stripe-payment-success"
+    },
+    {
+      "parameters": {
+        "jsCode": "const event = $input.first().json;\n// Only process completed checkout sessions\nif (event.type !== 'checkout.session.completed') {\n  return [];\n}\nconst session = event.data.object;\nconst plan = session.metadata?.plan || 'basic';\nconst limits = {\n  basic:  { rpm: 10,  tpm: 100000,  budget: 50 },\n  pro:    { rpm: 30,  tpm: 500000,  budget: 200 },\n  custom: { rpm: 100, tpm: 2000000, budget: 1000 }\n};\nreturn [{\n  json: {\n    email: session.customer_details?.email,\n    name: session.customer_details?.name,\n    plan,\n    amount: session.amount_total / 100,\n    currency: session.currency,\n    ...limits[plan]\n  }\n}];"
+      },
+      "id": "parse-payment",
+      "name": "Parse Payment",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4000/key/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer {{ $env.LITELLM_MASTER_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "models", "value": "[\"gpt-3.5-turbo\",\"fast\"]" },
+            { "name": "max_budget", "value": "={{ $json.budget }}" },
+            { "name": "rpm_limit", "value": "={{ $json.rpm }}" },
+            { "name": "tpm_limit", "value": "={{ $json.tpm }}" },
+            { "name": "duration", "value": "30d" },
+            { "name": "metadata", "value": "={\"email\":\"{{ $json.email }}\",\"plan\":\"{{ $json.plan }}\"}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "create-api-key",
+      "name": "Create LiteLLM API Key",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer {{ $env.RESEND_API_KEY }}" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "from", "value": "API <api@ativadata.com>" },
+            { "name": "to", "value": "={{ $('Parse Payment').item.json.email }}" },
+            { "name": "subject", "value": "Your ativadata.com API key is ready 🚀" },
+            { "name": "html", "value": "=<h2>Welcome, {{ $('Parse Payment').item.json.name }}!</h2><p>Your <strong>{{ $('Parse Payment').item.json.plan }}</strong> plan is active.</p><h3>Your API Key</h3><code style='background:#f4f4f4;padding:12px;display:block;font-size:14px'>{{ $json.key }}</code><h3>Endpoint</h3><code style='background:#f4f4f4;padding:12px;display:block'>https://api.ativadata.com/v1</code><h3>Quick Test</h3><pre style='background:#1a1a1a;color:#fff;padding:16px'>curl https://api.ativadata.com/v1/chat/completions \\\n  -H 'Authorization: Bearer {{ $json.key }}' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"user\",\"content\":\"Hello!\"}]}'</pre><p>Limits: {{ $('Parse Payment').item.json.rpm }} req/min | {{ $('Parse Payment').item.json.tpm }} tokens/min</p><p>Dashboard: <a href='https://api.ativadata.com'>api.ativadata.com</a></p>" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "send-credentials-email",
+      "name": "Email Credentials",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "=💰 New client!\n\n{{ $('Parse Payment').item.json.name }} ({{ $('Parse Payment').item.json.email }})\nPlan: {{ $('Parse Payment').item.json.plan }}\nAmount: ${{ $('Parse Payment').item.json.amount }} {{ $('Parse Payment').item.json.currency }}\nKey: {{ $json.key }}",
+        "additionalFields": {}
+      },
+      "id": "telegram-alert",
+      "name": "Telegram Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Stripe Webhook": { "main": [[{ "node": "Parse Payment", "type": "main", "index": 0 }]] },
+    "Parse Payment": { "main": [[{ "node": "Create LiteLLM API Key", "type": "main", "index": 0 }]] },
+    "Create LiteLLM API Key": { "main": [[{ "node": "Email Credentials", "type": "main", "index": 0 }, { "node": "Telegram Alert", "type": "main", "index": 0 }]] }
+  },
+  "active": true,
+  "settings": { "timezone": "America/Sao_Paulo" }
+}

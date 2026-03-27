@@ -1,0 +1,18 @@
+[Unit]
+Description=Golem Network Provider (yuserver - 8 cores, 16GB RAM)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=yuri
+Environment="PATH=/home/yuri/.local/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStartPre=/home/yuri/.local/bin/yagna consent allow-all
+ExecStart=/home/yuri/.local/bin/golemsp run
+Restart=on-failure
+RestartSec=30
+StandardOutput=append:/home/yuri/income-services/shared/logs/golem.log
+StandardError=append:/home/yuri/income-services/shared/logs/golem.log
+
+[Install]
+WantedBy=multi-user.target
