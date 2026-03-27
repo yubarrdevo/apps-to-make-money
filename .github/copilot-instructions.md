@@ -227,3 +227,45 @@ Required n8n environment variables (set in n8n Settings → Variables):
 - `LITELLM_MASTER_KEY` — LiteLLM master key
 - `TELEGRAM_CHAT_ID` — your Telegram chat ID
 - `RESEND_API_KEY` — for sending credential emails (resend.com, free tier)
+
+---
+
+## Credentials Needed to Unlock Full Automation
+
+Set these to activate all alerting and provisioning:
+
+```bash
+# Edit this file:
+nano ~/income-services/shared/.gpu-scheduler.env
+```
+
+| Variable | Where to get it | Used by |
+|---|---|---|
+| `TELEGRAM_TOKEN` | @BotFather on Telegram | GPU scheduler alerts, health check, n8n |
+| `TELEGRAM_CHAT_ID` | @userinfobot on Telegram | Same as above |
+| `RESEND_API_KEY` | resend.com (free tier) | Stripe → email API credentials |
+
+Then set in n8n (https://n8n.atividata.com.br → Settings → Variables):
+- `TELEGRAM_CHAT_ID`
+- `RESEND_API_KEY`
+
+### money4band (bandwidth sharing)
+Fill account credentials in `~/income-services/bandwidth/money4band/.env`, then:
+```bash
+cd ~/income-services/bandwidth/money4band
+source venvm4b/bin/activate
+python3 main.py   # one-time interactive setup, generates docker-compose.yml
+docker compose up -d
+```
+
+### Golem Network
+Golem provider installed (`golemsp` + `yagna` in `~/.local/bin/`). Testnet initialized.
+Known issue: golemsp 0.17.6 crashes (exit 11) after connecting — upstream bug.
+Workaround: re-run `curl -sSf https://join.golem.network/as-provider | bash` when they release a fix.
+Node configured: 8 cores, 16GiB RAM, 100GiB disk, node name `yuri-ativadata-node`.
+
+### ComfyUI
+Image pulling (`yanwk/comfyui-boot:cu130-slim-v2`). Models already downloaded:
+- `~/income-services/ai-content/models/checkpoints/flux1-schnell-fp8.safetensors` (8GB)
+- `~/income-services/ai-content/models/checkpoints/sd_xl_base_1.0.safetensors` (6.5GB)
+Once image pull completes: `cd ~/income-services/ai-content && docker compose up -d`
