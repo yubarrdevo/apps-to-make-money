@@ -1,0 +1,22 @@
+services:
+  comfyui:
+    image: yanwk/comfyui-boot:cu130-slim-v2
+    container_name: comfyui
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./models:/root/models
+      - ./input:/root/input
+      - ./output:/root/output
+      - ./custom_nodes:/root/custom_nodes
+    environment:
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    ipc: host

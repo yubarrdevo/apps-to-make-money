@@ -1,719 +1,407 @@
-# 💰 Guia Completo — Stack de Renda Automatizada
-> Servidor: yuserver | Hardware: Ryzen 9 9950X, 60GB RAM, RTX 3060 12GB, 2Gbps
-> Tudo já está rodando. Este guia mostra o que fazer para o dinheiro entrar.
+# 💰 Guia Completo — Stack ComfyUI (Foco & Lucro)
+
+> **Filosofia:** Um serviço, dominado. Tudo gira em torno do ComfyUI.
+> **Servidor:** yuserver | Ryzen 9 9950X, 60GB RAM, RTX 3060 12GB
+> **Receita esperada:** R$2.000-4.000/mês com 30 min/dia de trabalho
 
 ---
 
-## 🌐 Domínios
+## 🎯 Por Que ComfyUI?
 
-| Domínio | Uso |
-|---|---|
-| `ativadata.com` | **Vitrine para clientes** — API pública, landing page |
-| `ativadata.com.br` | Clientes BR (LGPD, confiança local) |
-| `atividata.com.br` | **Infra interna** — nunca mostrar para cliente |
+| Fator | ComfyUI | API LLM | Outros |
+|-------|---------|---------|--------|
+| **Receita/Cliente** | R$497/mês | R$97-297/mês | Variável |
+| **Demanda** | Alta (e-commerce) | Média | Baixa |
+| **Concorrência** | Baixa (barreira técnica) | Alta | Muito Alta |
+| **Seu Tempo** | 30 min/dia | 5 min/dia | Variável |
+| **Setup** | Simples | Simples | Complexo |
 
----
-
-## 🚦 URLs de Acesso
-
-### Para Clientes (mostrar/vender)
-| Serviço | URL |
-|---|---|
-| **LLM API** (OpenAI-compatible) | https://llm.ativadata.com |
-| **LLM API** (alt BR) | https://api.ativadata.com |
-
-### Infra Interna (só você acessa)
-| Serviço | URL | Login |
-|---|---|---|
-| **n8n** (automações) | https://n8n.atividata.com.br | admin / ver .env |
-| **ComfyUI** (imagens IA) | https://studio.atividada.com.br | sem login |
-| **MoneyPrinter** | https://moneyprinter.atividata.com.br | sem login |
-| **Coolify** (PaaS) | https://coolify.atividata.com.br | sem login |
-| **Portainer** (Docker) | https://portainer.atividata.com.br | sem login |
-| **Emby** (media) | https://emby.atividata.com.br | sem login |
+**Conclusão:** Focar 100% em ComfyUI até ter R$2-3k/mês consistente. Depois, opcionalmente, adicionar outros serviços.
 
 ---
 
-## 📋 PARTE 1: Credenciais que Precisa (1x, depois é automático)
+## 📋 PARTE 1: Setup Inicial (20 minutos)
 
-### 1.1 Telegram Bot (5 minutos)
-> Libera: todos os alertas do servidor, notificações de pagamento, ativação dos workflows n8n
+### 1.1 Instalar ComfyUI
 
-**Passo a passo:**
-1. Abra o Telegram no celular
-2. Pesquise `@BotFather` → clique → `/newbot`
-3. Escolha um nome: ex. `Yuri Server Bot`
-4. Escolha um username: ex. `yuriserver_bot`
-5. Copie o **token** que aparece (formato: `1234567890:ABCdef...`) → esse é o `TELEGRAM_TOKEN`
-6. Pesquise `@userinfobot` → `/start` → anote o número que aparece em "Id:" → esse é o `TELEGRAM_CHAT_ID`
-7. **Abra o bot e clique em /start** (obrigatório antes de testar)
-
-**Cole no servidor:**
 ```bash
+cd ~/apps-to-make-money/infra/services/comfyui
+
+# Baixar modelo FLUX (8GB, uma vez só)
+mkdir -p models/checkpoints
+cd models/checkpoints
+wget https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell-fp8.safetensors
+cd ../..
+
+# Subir serviço
+docker compose up -d
+
+# Verificar
+docker ps | grep comfyui
+```
+
+Acesse: http://localhost:8188
+
+### 1.2 Testar Geração de Imagem
+
+1. Abra http://localhost:8188
+2. Arraste uma imagem de produto qualquer
+3. Clique no workflow "Remove Background"
+4. Clique "Queue Prompt"
+5. Imagem processada aparece em `./output/`
+
+**Tempo médio:** 15-30 segundos por imagem
+
+### 1.3 Configurar Telegram (Alertas)
+
+```bash
+# 1. Telegram: @BotFather → /newbot → copie o token
+# 2. Telegram: @userinfobot → /start → copie o chat_id
+
 nano ~/income-services/shared/.gpu-scheduler.env
 # Preencha:
-# TELEGRAM_TOKEN=seu_token_aqui
-# TELEGRAM_CHAT_ID=seu_id_aqui
+# TELEGRAM_TOKEN=seu_token
+# TELEGRAM_CHAT_ID=seu_chat_id
+
+# Teste
+~/apps-to-make-money/infra/monitoring/telegram-alert.sh "✅ ComfyUI rodando!"
 ```
 
-**Pegar o chat_id correto após clicar /start:**
+---
+
+## 📋 PARTE 2: Conseguir Clientes (1 hora/semana)
+
+### 2.1 Onde Encontrar
+
+**🎯 Alvo principal: Vendedores do Mercado Livre com fotos ruins**
+
+1. Acesse Mercado Livre
+2. Busque produtos (eletrônicos, sapatos, roupas, decoração)
+3. Identifique anúncios com:
+   - Foto tirada no celular
+   - Fundo bagunçado
+   - Produto mal enquadrado
+
+4. Anote o nome do vendedor/loja
+
+**Outros locais:**
+- Grupos Facebook: "Vendedores Mercado Livre Brasil", "E-commerce Brasil"
+- Instagram: busque `#revendedora`, `#lojaonline`
+- LinkedIn: donos de pequenas lojas online
+
+### 2.2 Script de Abordagem
+
+**DM Mercado Livre / WhatsApp / Instagram:**
+
+```
+Oi [Nome]! Vi seu anúncio de [produto].
+
+Ofereço fotos profissionais com fundo branco usando IA:
+✅ R$15 por foto (ou R$120 pack de 10)
+✅ Entrega em 24h
+✅ Primeira foto GRÁTIS para você testar
+
+Posso te mostrar um exemplo com uma foto sua?
+```
+
+**Resposta se pedirem exemplo:**
+
+```
+Envia uma foto do produto que quero processar aqui.
+Te mando o resultado em 10 minutos, sem compromisso!
+```
+
+### 2.3 Primeiro Cliente (Processo Completo)
+
+1. **Cliente envia foto** (WhatsApp, email, DM)
+
+2. **Você processa** (5 minutos):
+   ```bash
+   # Abra ComfyUI: http://localhost:8188
+   # Arraste foto do cliente
+   # Aplique workflow "White Background Product"
+   # Queue Prompt
+   # Salve resultado de ./output/
+   ```
+
+3. **Entrega**:
+   - Manda foto processada via WhatsApp/email
+   - Ou sobe no Google Drive e envia link
+
+4. **Fechamento**:
+   ```
+   Gostou? Tenho 2 opções:
+   • R$15 por foto avulsa
+   • R$497/mês para 20 fotos (mais barato, R$24 cada)
+
+   Qual funciona melhor para você?
+   ```
+
+### 2.4 Meta Primeira Semana
+
+- [ ] 10 DMs enviados (Mercado Livre)
+- [ ] 3 primeiras fotos grátis processadas
+- [ ] 1-2 clientes fechados (avulso ou mensal)
+
+**Receita esperada:** R$150-500 na primeira semana
+
+---
+
+## 📋 PARTE 3: Workflow Operacional
+
+### 3.1 Rotina Diária (15-30 min)
+
+| Horário | Ação | Tempo |
+|---------|------|-------|
+| Manhã (10h) | Checar pedidos pendentes (WhatsApp/email) | 5 min |
+| Tarde (15h) | Processar imagens (batch) | 15-20 min |
+| Noite (19h) | Entregar trabalhos finalizados | 5 min |
+
+**Total:** ~30 min/dia
+
+### 3.2 Organização de Arquivos
+
+```
+~/comfyui-clients/
+├── cliente-joao-eletronicos/
+│   ├── input/          # Fotos que ele mandou
+│   ├── output/         # Fotos processadas
+│   └── delivered/      # Já entregues
+├── cliente-maria-roupas/
+└── ...
+```
+
+### 3.3 Processamento em Lote
+
+Se tiver 10 fotos do mesmo cliente:
+
+1. Abra ComfyUI
+2. Configure workflow uma vez
+3. Arraste todas as 10 imagens
+4. Queue Prompt (processa todas automaticamente)
+5. Resultados em `./output/`
+
+**Tempo:** ~5 minutos de setup + 15 segundos/imagem
+
+### 3.4 Precificação Inteligente
+
+| Serviço | Preço | Quando usar |
+|---------|-------|-------------|
+| Foto avulsa | R$15 | Cliente testando, pedido único |
+| Pack 10 fotos | R$120 (R$12 cada) | Cliente com catálogo pequeno |
+| Mensal 20 fotos | R$497 (R$24 cada) | Cliente recorrente |
+| Mensal 50 fotos | R$997 (R$20 cada) | Loja grande |
+
+**Meta:** 3-5 clientes mensais = R$1.491-2.485/mês
+
+---
+
+## 📋 PARTE 4: Escalar (Meses 2-6)
+
+### 4.1 Mês 1: Aprender & Validar
+
+- [ ] Processar 50+ fotos (prática)
+- [ ] 2-3 clientes ativos
+- [ ] Refinar workflows para categorias comuns (sapatos, eletrônicos, roupas)
+
+**Receita esperada:** R$800-1.500
+
+### 4.2 Mês 2-3: Padronizar
+
+- [ ] Templates salvos para cada categoria
+- [ ] Tempo/foto reduzido para <2 min
+- [ ] 5-8 clientes ativos
+- [ ] Postar 2x/semana em grupos Facebook
+
+**Receita esperada:** R$1.500-3.000
+
+### 4.3 Mês 4-6: Automatizar
+
+- [ ] n8n workflow: cliente faz upload → Telegram notifica
+- [ ] n8n workflow: processamento completo → auto-entrega via email
+- [ ] 10+ clientes mensais
+- [ ] Considerar contratar VA para comunicação com cliente
+
+**Receita esperada:** R$3.000-5.000
+
+**Seu tempo:** 30 min/dia → 15 min/dia (só processamento)
+
+---
+
+## 📋 PARTE 5: Serviços Opcionais (Depois de R$2k/mês no ComfyUI)
+
+### 5.1 n8n (Automações)
+
+**Quando adicionar:** Mês 3+, quando tiver demanda de clientes
+
+**O que vender:**
+- Pipeline de leads (Google Sheets → IA → CRM): R$800-1.500
+- Monitor de preços (Mercado Livre): R$297/mês
+- Auto-responder com IA: R$500 setup + R$297/mês
+
+**Setup:**
 ```bash
-source ~/income-services/shared/.gpu-scheduler.env
-curl -s "https://api.telegram.org/bot${TELEGRAM_TOKEN}/getUpdates" | python3 -c "
-import sys,json
-data=json.load(sys.stdin)
-for u in data.get('result',[]):
-    chat=u.get('message',{}).get('chat',{})
-    print('Chat ID:', chat.get('id'), '| Nome:', chat.get('first_name',''))
-"
+cd ~/apps-to-make-money/infra/services/n8n
+cp .env.example .env
+nano .env  # Configure senhas
+docker compose up -d
 ```
 
-**Teste:**
+Acesse: http://localhost:5678
+
+### 5.2 LiteLLM API (LLM Privada)
+
+**Quando adicionar:** Mês 6+, se tiver demanda
+
+**O que é:** API compatível com OpenAI, hospedada no seu servidor
+
+**Quem paga:**
+- Empresas que não querem enviar dados para fora do Brasil (LGPD)
+- Startups que querem cortar custos
+
+**Setup:**
 ```bash
-~/income-services/shared/telegram-alert.sh "✅ Servidor funcionando!"
+cd ~/apps-to-make-money/infra/services/litellm
+cp .env.example .env
+nano .env  # Configure DATABASE_URL
+docker compose up -d
 ```
+
+Acesse: http://localhost:4000
+
+**Preços:**
+- Básico: R$97/mês (100k tokens/dia)
+- Pro: R$297/mês (500k tokens/dia)
 
 ---
 
-### 1.2 Resend (email automático para clientes) — 10 minutos
-> Libera: envio automático de credenciais quando cliente paga via Stripe
+## 📋 PARTE 6: Monitoramento
 
-1. Acesse [resend.com](https://resend.com) → Sign up (grátis)
-2. Clique em **Domains** → Add Domain → digite `ativadata.com`
-3. Adicione os registros DNS no Cloudflare (TXT + MX que o Resend mostrar)
-4. Volte no Resend → Verify → deve ficar verde
-5. Vá em **API Keys** → Create API Key → copie
-
-**Cole no n8n:**
-```
-n8n (https://n8n.atividata.com.br) → Settings → Variables → RESEND_API_KEY
-```
-
----
-
-### 1.3 Stripe (receber pagamentos) — 15 minutos
-> Libera: provisionamento automático de clientes, assinaturas recorrentes
-
-1. Acesse [stripe.com](https://stripe.com) → criar conta
-2. Complete verificação de identidade (CPF, endereço)
-3. Crie os produtos:
-   - **Básico**: R$97/mês → "API LLM Privada — 100k tokens/dia"
-   - **Pro**: R$297/mês → "API LLM Multi-modelo — 500k tokens/dia"
-   - **Custom**: R$597/mês → "Pipeline RAG dedicado"
-4. **Developers** → Webhooks → Add endpoint:
-   - URL: `https://n8n.atividata.com.br/webhook/stripe-payment`
-   - Events: `checkout.session.completed`, `invoice.payment_succeeded`
-5. Copie o **Webhook Secret** (`whsec_...`)
-
-**No n8n:** Credentials → New → Stripe Trigger → cole o Webhook Secret
-
----
-
-### 1.4 Contas de Bandwidth Sharing — 20 minutos
-> Renda passiva: $20-40/mês sem fazer nada
-
-| Plataforma | Link | Pagamento |
-|---|---|---|
-| Honeygain | [honeygain.com](https://honeygain.com) | PayPal / crypto |
-| EarnApp | [earnapp.com](https://earnapp.com) | PayPal |
-| Pawns.app | [pawns.app](https://pawns.app) | PayPal / crypto |
-| PacketStream | [packetstream.io](https://packetstream.io) | PayPal |
-| Peer2Profit | [peer2profit.com](https://peer2profit.com) | crypto |
-| Repocket | [repocket.co](https://repocket.co) | PayPal |
-| Grass | [getgrass.io](https://getgrass.io) | Solana (baixe Phantom) |
-
-**Após criar todas as contas:**
-```bash
-nano ~/income-services/bandwidth/money4band/.env
-# Preencha cada email/senha/token
-cd ~/income-services/bandwidth/money4band
-source venvm4b/bin/activate
-python3 main.py       # setup interativo único
-docker compose up -d  # sobe e fica rodando sozinho
-```
-
----
-
-## 📋 PARTE 2: Como Conseguir Clientes
-
-### 2.1 API LLM Privada — R$97-597/mês por cliente
-
-**Post LinkedIn (copie e cole):**
-```
-🔐 Sua empresa usa ChatGPT? Seus dados passam pelos EUA.
-
-Ofereço API de IA privada hospedada em São Paulo:
-✅ Seus dados ficam no Brasil
-✅ Compatível com OpenAI (só muda a base_url, sem alterar código)
-✅ Modelos: equivalente ao GPT-3.5 e GPT-4
-✅ R$97/mês — 100k tokens/dia
-
-Endpoint: https://llm.ativadata.com
-7 dias grátis. Me chama no DM.
-
-#IA #LLM #LGPD #Tech #Automação
-```
-
-**Quem abordar:**
-- Escritórios de advocacia (LGPD os assusta)
-- Agências de marketing (copy em escala)
-- E-commerces Mercado Livre (descrições de produto)
-- Startups usando OpenAI que querem cortar custo
-
-**DM LinkedIn:**
-```
-Oi [Nome], vi que vocês usam IA no processo de [X].
-Tenho uma API LLM privada hospedada no Brasil — dados nunca saem do país.
-Compatível com OpenAI, R$97/mês. Posso te dar 7 dias grátis pra testar?
-```
-
-**Como o cliente conecta:**
-```python
-from openai import OpenAI
-client = OpenAI(
-    base_url="https://llm.ativadata.com/v1",
-    api_key="sk-chave-gerada-automaticamente"
-)
-```
-
----
-
-### 2.2 Automações n8n — R$500-2.500 projeto + R$297-797/mês retainer
-
-**Poste no 99freelas.com.br e Workana:**
-```
-Título: Automações n8n — Integração de sistemas, relatórios automáticos, IA
-
-Crio workflows de automação que economizam horas de trabalho manual.
-
-Exemplos:
-• Pipeline de enriquecimento de leads (Google Sheets → IA → CRM)
-• Gerador de descrições de produto com IA em PT-BR
-• Monitor de preços Mercado Livre com alertas
-• Auto-responder de suporte com classificação por IA
-
-Valores:
-• Template pronto: R$150-500
-• Workflow personalizado: R$500-2.500
-• Manutenção mensal: R$297-797
-```
-
----
-
-### 2.3 Conteúdo IA — Fotos e vídeos de produto
-
-**Após ComfyUI subir** (https://studio.atividata.com.br):
-
-- Foto com fundo branco profissional: R$15/imagem
-- Pack 10 imagens: R$120
-- Vídeo produto 15-30s: R$97
-- Pacote mensal (20 fotos + 4 vídeos): R$497/mês
-
-**Onde anunciar:**
-- Grupos Facebook: "Vendedores Mercado Livre Brasil"
-- Contato direto: busque produtos no ML com fotos ruins → DM o vendedor
-
----
-
-### 2.4 Arbitragem de Automação — Renda Recorrente Passiva
-
-**Produto 1: Monitor de Preços** — R$297/mês por loja
-```
-n8n (6h/6h) → scrapa ML → compara catálogo → email digest
-```
-
-**Produto 2: Newsletter com curadoria IA** — R$97/mês
-```
-n8n (diário) → RSS feeds → LLM resume → Resend envia
-```
-
-**Nichos BR que pagam bem:** Agro, Jurídico, E-commerce, Finanças
-
----
-
-## 📋 PARTE 3: Loop de Venda Automático
-
-```
-Cliente acessa llm.ativadata.com →
-  Stripe (R$97-597/mês) →
-    n8n webhook →
-      LiteLLM gera API key →
-        Resend envia credenciais →
-          Cliente usa API →
-            GPU gera receita →
-              Telegram te avisa
-```
-**Zero intervenção manual por cliente.**
-
----
-
-## 📋 PARTE 4: Rotina Semanal
-
-| Dia | Ação | Tempo |
-|---|---|---|
-| Segunda | Post LinkedIn (copie templates acima) | 10 min |
-| Terça | Responder DMs e leads | 20 min |
-| Quarta | Atualizar gig no 99freelas/Workana | 10 min |
-| Quinta | DM 5 vendedores ML com fotos ruins | 15 min |
-| Sexta | Ver resumo semanal (Telegram envia) | 5 min |
-
-**Total: ~1h/semana. O servidor faz o resto.**
-
----
-
-## 📋 PARTE 5: Monitoramento (automático)
+### 6.1 Health Check Automático
 
 ```bash
-# Ver status agora
-docker ps
+# Roda a cada 15 minutos via cron
+tail -f ~/income-services/shared/logs/health-$(date +%Y%m%d).log
+```
+
+Recebe alerta no Telegram se algo cair.
+
+### 6.2 Checagem Manual (1x/dia)
+
+```bash
+# ComfyUI rodando?
+docker ps | grep comfyui
+
+# GPU OK?
 nvidia-smi
-~/income-services/shared/health-check.sh
 
-# Ver logs de qualquer serviço
-docker logs n8n --tail 50
-docker logs litellm-proxy --tail 50
+# Disco OK?
+df -h /
 ```
 
-Alertas automáticos via Telegram a cada 15 minutos.
+### 6.3 Backup (Automático)
+
+Já configurado via cron:
+- Diário: 4h da manhã
+- Semanal: Domingo 5h
+
+Backups em: `~/income-services/shared/backups/`
 
 ---
 
-## 📋 PARTE 6: Projeção Financeira
+## 📋 PARTE 7: Projeção Financeira Real
 
-### Mês 1-2
-| Fonte | Valor |
-|---|---|
-| Golem compute | R$100-400 |
-| Bandwidth sharing | R$100-200 |
-| 1 cliente API LLM | R$97-297 |
-| 1 projeto n8n | R$500-1.000 |
-| **Total** | **R$800-1.900** |
+### Mês 1-2 (Começando)
 
-### Mês 6+
 | Fonte | Valor |
-|---|---|
-| Golem + bandwidth | R$200-600 |
-| 3 clientes API recorrentes | R$291-1.791 |
-| 2 retainers n8n | R$594-1.594 |
-| Conteúdo IA | R$500-1.500 |
-| Arbitragem (newsletters/monitores) | R$194-994 |
-| **Total** | **R$1.779-6.479** |
+|-------|-------|
+| ComfyUI (2-3 clientes) | R$800-1.500 |
+| Golem + bandwidth | R$200-400 |
+| **Total** | **R$1.000-1.900** |
+
+### Mês 3-6 (Crescimento)
+
+| Fonte | Valor |
+|-------|-------|
+| ComfyUI (5-8 clientes) | R$2.000-4.000 |
+| n8n (1-2 projetos) | R$500-1.500 |
+| Golem + bandwidth | R$200-400 |
+| **Total** | **R$2.700-5.900** |
+
+### Mês 6+ (Estável)
+
+| Fonte | Valor |
+|-------|-------|
+| ComfyUI (10+ clientes) | R$4.000-8.000 |
+| n8n retainers | R$800-2.000 |
+| LiteLLM API | R$300-900 |
+| Golem + bandwidth | R$300-600 |
+| **Total** | **R$5.400-11.500** |
+
+**Tempo de trabalho:** 1-2 horas/dia → pode contratar VA para atendimento
 
 ---
 
 ## 🆘 Troubleshooting
 
+### ComfyUI não inicia
+
 ```bash
-# Serviço caiu
-docker ps
-cd ~/income-services/[serviço] && docker compose up -d
+# Checar GPU
+nvidia-smi
 
-# GPU travada
-~/income-services/shared/gpu-lock.sh status
-~/income-services/shared/gpu-lock.sh [serviço] stop
+# Checar logs
+docker logs comfyui
 
-# Golem parou
-sg kvm -c "golemsp run" &
-
-# n8n workflow não ativa
-# → Configure credencial Telegram em: n8n → Credentials → Telegram
+# Reiniciar
+cd ~/apps-to-make-money/infra/services/comfyui
+docker compose restart
 ```
+
+### Disco cheio
+
+```bash
+# Limpar Docker antigo
+docker system prune -a
+
+# Limpar outputs antigos
+rm -rf ~/apps-to-make-money/infra/services/comfyui/output/old-*
+```
+
+### Cliente reclamando de qualidade
+
+1. Peça feedback específico
+2. Ajuste parâmetros do workflow
+3. Refaça grátis uma vez (fidelização)
+4. Se persistir, ofereça reembolso (raríssimo)
 
 ---
 
 ## ✅ Checklist de Ativação
 
-- [x] **1. Telegram** — token + chat_id configurados em `.gpu-scheduler.env` e Infisical
-- [x] **2. Resend** — `ativadata.com` ✅ + `ativadata.com.br` ✅ verificados → API keys no n8n + Infisical
-- [x] **3. Stripe** — produtos R$97/297/597 criados → payment links → webhook → n8n ativo
-- [x] **3.1 Secrets** — Infisical configurado, sync automático 3h/dia, zero secret no git
-- [x] **3.2 Stripe CLI + SDK + MCP** — instalados e configurados
-- [x] **3.3 n8n workflow** — LLM Client Auto-Provisioning **ATIVO** (Stripe → API Key → Email)
-- [x] **4. money4band** — EarnApp ✅ | Honeygain ✅ | IPRoyal Pawns ✅ | Repocket ✅ | PacketStream ⏳ (aguarda IP residencial) | EarnApp ⏳ (aguarda verificação Discord)
-- [x] **4.1 vLLM** — Qwen2.5-14B-AWQ rodando na GPU (RTX 3060 12GB exclusivo) | Ollama no CPU (modelos gratuitos)
-- [x] **4.2 Cloudflare tunnel** — `api.ativadata.com` + `llm.ativadata.com` → LiteLLM porta 4000
-- [x] **4.3 Boot persistence** — NVIDIA modules, Docker restart policies, Ollama CPU-only todos persistentes
-- [ ] **5. Landing page** — `ativadata.com` com planos e links Stripe
-- [ ] **6. Primeiro post LinkedIn** — copiar template da seção 2.1
-- [ ] **7. Primeiro gig no 99freelas** — copiar template da seção 2.2
-- [ ] **8. ComfyUI** — `cd ~/income-services/ai-content && docker compose up -d`
+- [x] ComfyUI instalado e rodando
+- [x] Modelo FLUX baixado
+- [x] Telegram configurado para alertas
+- [ ] Primeira foto de teste processada
+- [ ] 10 DMs enviados (Mercado Livre)
+- [ ] Primeiro cliente fechado
+- [ ] 3 clientes mensais ativos (R$1.500/mês)
+- [ ] n8n instalado (quando precisar de automação)
+- [ ] 10+ clientes mensais (R$5.000+/mês)
 
 ---
 
-*Repo: https://github.com/yubarrdevo/apps-to-make-money*
+## 🎓 Próximos Passos
 
-> Servidor: yuserver | Domínios: ativadata.com / ativadata.com.br / atividata.com.br
-> Tudo já está rodando. Este guia mostra o que fazer para o dinheiro entrar.
+1. **Hoje:** Processar 5 fotos de teste (prática)
+2. **Amanhã:** Enviar 10 DMs no Mercado Livre
+3. **Essa semana:** Fechar primeiro cliente
+4. **Esse mês:** 3 clientes ativos
+5. **Próximos 3 meses:** Escalar para 10+ clientes
 
----
-
-## 🚦 Status Atual dos Serviços
-
-| Serviço | URL | Status |
-|---|---|---|
-| LiteLLM API (LLM privada) | https://api.ativadata.com | ✅ Online |
-| n8n (automações) | https://n8n.atividata.com.br | ✅ Online |
-| MoneyPrinter (vídeos) | http://localhost:8001 | ✅ Online |
-| Ollama (modelos locais) | interno | ✅ Online |
-| Golem (compute descentralizado) | mainnet | ✅ Publicando ofertas |
-| ComfyUI (imagens IA) | http://localhost:8188 | ✅ Online |
-| EarnApp (bandwidth) | — | ⏳ Aguarda verificação Discord |
-| Honeygain (bandwidth) | — | ✅ Rodando |
-| Stripe → n8n provisioning | automático | ✅ Ativo |
-| Infisical (secrets) | app.infisical.com | ✅ Sync diário 3h |
+**Foco:** Domine ComfyUI. Ignore o resto até ter R$2-3k/mês recorrente.
 
 ---
 
-## 📋 PARTE 1: Credenciais que Precisa (1x, depois é automático)
-
-### 1.1 Telegram Bot (5 minutos)
-> Libera: todos os alertas do servidor, notificações de pagamento, ativação dos workflows n8n
-
-**Passo a passo:**
-1. Abra o Telegram no celular
-2. Pesquise `@BotFather` → clique → `/newbot`
-3. Escolha um nome: ex. `Yuri Server Bot`
-4. Escolha um username: ex. `yuriserver_bot`
-5. Copie o **token** que aparece (formato: `1234567890:ABCdef...`) → esse é o `TELEGRAM_TOKEN`
-6. Pesquise `@userinfobot` → `/start` → anote o número que aparece em "Id:" → esse é o `TELEGRAM_CHAT_ID`
-
-**Depois, cole no servidor:**
-```bash
-nano ~/income-services/shared/.gpu-scheduler.env
-# Preencha:
-# TELEGRAM_TOKEN=seu_token_aqui
-# TELEGRAM_CHAT_ID=seu_id_aqui
-```
-
-**Teste:**
-```bash
-~/income-services/shared/telegram-alert.sh "✅ Servidor funcionando!"
-```
-
----
-
-### 1.2 Resend (email automático para clientes) — 10 minutos
-> Libera: envio automático de credenciais quando cliente paga via Stripe
-
-1. Acesse [resend.com](https://resend.com) → Sign up (grátis)
-2. Clique em **Domains** → Add Domain → digite `ativadata.com`
-3. Eles mostram registros DNS para adicionar — acesse o Cloudflare:
-   - Faça login em [dash.cloudflare.com](https://dash.cloudflare.com)
-   - Domínio `ativadata.com` → DNS → adicione os registros que o Resend mostrou (TXT + MX)
-   - Volte no Resend → Verify → deve ficar verde
-4. Vá em **API Keys** → Create API Key → copie
-
-**Cole no servidor:**
-```bash
-# No n8n: Settings → Variables → adicione:
-# RESEND_API_KEY = re_xxxxxxxxxxxx
-```
-
----
-
-### 1.3 Stripe (receber pagamentos) — 15 minutos
-> Libera: provisionamento automático de clientes API, assinaturas recorrentes
-
-1. Acesse [stripe.com](https://stripe.com) → criar conta
-2. Complete verificação de identidade (CPF, endereço)
-3. Crie os produtos:
-   - **Básico**: R$97/mês → "API LLM Privada — 100k tokens/dia"
-   - **Pro**: R$297/mês → "API LLM Multi-modelo — 500k tokens/dia"
-   - **Custom**: R$597/mês → "Pipeline RAG dedicado"
-4. Vá em **Developers** → Webhooks → Add endpoint:
-   - URL: `https://n8n.atividata.com.br/webhook/stripe-payment`
-   - Events: `checkout.session.completed`, `invoice.payment_succeeded`
-5. Copie o **Webhook Secret** (formato: `whsec_...`)
-
-**Cole no n8n:**
-```
-n8n UI → Credentials → New → Stripe Trigger
-→ cole o Webhook Secret
-```
-
----
-
-### 1.4 Contas de Bandwidth Sharing — 20 minutos
-> Renda passiva: $20-40/mês sem fazer nada, só deixar rodando
-
-Crie conta em cada um (email + senha, gratuito):
-
-| Plataforma | Link | Pagamento |
-|---|---|---|
-| Honeygain | [honeygain.com](https://honeygain.com) | PayPal / crypto |
-| EarnApp | [earnapp.com](https://earnapp.com) | PayPal |
-| Pawns.app | [pawns.app](https://pawns.app) | PayPal / crypto |
-| PacketStream | [packetstream.io](https://packetstream.io) | PayPal |
-| Peer2Profit | [peer2profit.com](https://peer2profit.com) | crypto |
-| Repocket | [repocket.co](https://repocket.co) | PayPal |
-| Grass | [getgrass.io](https://getgrass.io) | Solana (baixe Phantom no celular) |
-
-**Depois de criar todas as contas:**
-```bash
-nano ~/income-services/bandwidth/money4band/.env
-# Preencha cada email/senha/token
-# Depois:
-cd ~/income-services/bandwidth/money4band
-source venvm4b/bin/activate
-python3 main.py  # setup interativo único
-docker compose up -d  # sobe e fica rodando sozinho
-```
-
----
-
-## 📋 PARTE 2: Como Conseguir Clientes (sem depender de ninguém)
-
-### 2.1 API LLM Privada — Alvo: empresas BR que não querem mandar dados pro exterior
-
-**Post LinkedIn (copie e cole, adapte o nome):**
-```
-🔐 Sua empresa usa ChatGPT? Seus dados passam pelos EUA.
-
-Ofereço API de IA privada hospedada em São Paulo:
-✅ Seus dados ficam no Brasil
-✅ Compatível com OpenAI (troca de base_url, sem mudar código)
-✅ Modelos: equivalente ao GPT-3.5 e GPT-4
-✅ R$97/mês — 100k tokens/dia
-
-7 dias grátis. Me chama no DM.
-
-#IA #LLM #LGPD #Tech #Automação
-```
-
-**Quem abordar:**
-- Escritórios de advocacia (LGPD os assusta)
-- Agências de marketing (precisam de geração de copy em escala)
-- E-commerces no Mercado Livre (descrições de produto)
-- Startups que usam OpenAI e querem cortar custo
-
-**Como abordar (DM LinkedIn):**
-```
-Oi [Nome], vi que vocês usam IA no processo de [X].
-Tenho uma API LLM privada hospedada no Brasil — dados nunca saem do país.
-Compatível com OpenAI, R$97/mês. Posso te dar 7 dias grátis pra testar?
-```
-
----
-
-### 2.2 Automações n8n — Alvo: agências, e-commerce, qualquer empresa com processo repetitivo
-
-**Poste no 99freelas.com.br e Workana:**
-```
-Título: Automações n8n — Integração de sistemas, relatórios automáticos, IA
-
-Descrição:
-Crio workflows de automação usando n8n que economizam horas de trabalho manual.
-
-Exemplos do que já construí:
-• Pipeline de enriquecimento de leads (Google Sheets → IA → CRM)
-• Gerador automático de descrições de produto com IA
-• Monitor de preços de concorrentes (Mercado Livre) com alertas
-• Auto-responder de suporte com classificação por IA
-
-Valores:
-• Template pronto: R$150-500
-• Workflow personalizado: R$500-2.500
-• Manutenção mensal: R$297-797
-
-Respondo em 1 hora.
-```
-
-**DM direto para agências de marketing no LinkedIn:**
-```
-Oi [Nome], vocês fazem relatórios de performance manualmente?
-Consigo automatizar isso completamente — dados chegam, relatório sai.
-Posso mostrar como funciona numa call de 15 min?
-```
-
----
-
-### 2.3 Conteúdo IA (imagens + vídeos) — Alvo: vendedores Mercado Livre, Shopee
-
-**Após ComfyUI subir, o workflow é:**
-1. Cliente manda foto do produto
-2. ComfyUI gera versão com fundo branco profissional + variações
-3. MoneyPrinter gera vídeo para redes sociais
-4. Entrega via Google Drive ou email automático
-
-**Precificar:**
-- Foto com fundo removido + background profissional: R$15/imagem
-- Pack de 10 imagens: R$120
-- Vídeo produto (15-30s): R$97
-- Pacote mensal (20 fotos + 4 vídeos): R$497/mês
-
-**Onde anunciar:**
-- Grupos Facebook: "Vendedores Mercado Livre Brasil", "E-commerce Brasil"
-- Grupos WhatsApp de vendedores
-- Contato direto: busque produtos no ML com fotos ruins → DM o vendedor
-
----
-
-### 2.4 Arbitragem de Automação — Renda Recorrente Passiva
-
-**Produto 1: Monitor de Preços para E-commerce**
-```
-n8n roda a cada 6h → scrapa preços dos concorrentes no Mercado Livre →
-  compara com catálogo do cliente → envia digest por email
-```
-Cobrar: R$297/mês por loja
-
-**Para montar:**
-1. n8n já está rodando em https://n8n.atividata.com.br
-2. Crie workflow: HTTP Request (ML API) → Code (comparação) → Gmail/Resend (email)
-3. Primeiro cliente fecha → duplica o workflow com os dados dele
-
-**Produto 2: Newsletter de nicho com curadoria IA**
-```
-n8n diário → agrega RSS feeds do nicho →
-  LLM resume e ranqueia → formata → envia via Resend
-```
-Cobrar: R$97/mês por newsletter
-
-**Nichos que funcionam no Brasil:**
-- Agro (fazendeiros pagam bem)
-- Jurídico (advogados assinam tudo)
-- Finanças pessoais
-- E-commerce / dropshipping
-
----
-
-## 📋 PARTE 3: Infraestrutura de Vendas (configure 1x)
-
-### 3.1 Landing Page (já tem domínio, falta conteúdo)
-
-Acesse o Coolify em http://localhost:8000 e crie um novo serviço estático, ou use Netlify:
-
-```
-ativadata.com  →  página de serviços
-Seções:
-1. Hero: "IA Privada no Brasil"
-2. API LLM: planos R$97 / R$297 / R$597 (botão Stripe)
-3. Automações n8n: portfólio + preços
-4. Conteúdo IA: antes/depois de fotos de produto
-5. Contato: formulário → n8n webhook → você recebe no Telegram
-```
-
-### 3.2 Link de Pagamento Stripe
-
-Após criar os produtos no Stripe:
-- Cada produto gera um **Payment Link** (stripe.com/pay/xxx)
-- Cole esses links na landing page
-- Quando alguém paga → webhook → n8n provisiona automaticamente → Resend envia credenciais
-
-**Zero intervenção manual.**
-
----
-
-## 📋 PARTE 4: Rotina Semanal (única coisa que você faz)
-
-O servidor cuida de si mesmo. Sua única tarefa é **trazer clientes.**
-
-| Dia | Ação | Tempo |
-|---|---|---|
-| Segunda | Postar no LinkedIn (copie templates acima) | 10 min |
-| Terça | Responder DMs e leads do LinkedIn | 20 min |
-| Quarta | Postar no 99freelas/Workana (atualizar gig) | 10 min |
-| Quinta | Abordar 5 vendedores ML com fotos ruins | 15 min |
-| Sexta | Ver relatório semanal (Telegram vai mandar) | 5 min |
-| Fim de semana | Nada — servidor trabalha por você | — |
-
-**Total: ~1 hora por semana de trabalho ativo.**
-
----
-
-## 📋 PARTE 5: Monitoramento (automático)
-
-O servidor já monitora tudo e te avisa no Telegram:
-
-```
-✅ Serviços: checados a cada 15 minutos
-✅ GPU: temperatura e uso monitorados
-✅ Falhas: auto-restart + alerta Telegram
-✅ Git: commit automático a cada hora
-✅ Golem: roda na inicialização automaticamente
-```
-
-**Para ver status agora:**
-```bash
-~/income-services/shared/health-check.sh
-# ou
-docker ps
-nvidia-smi
-```
-
----
-
-## 📋 PARTE 6: Projeção Financeira
-
-### Mês 1-2 (com esforço mínimo)
-| Fonte | Valor |
-|---|---|
-| Golem compute | R$100-400 |
-| Bandwidth sharing | R$100-200 |
-| 1 cliente API LLM | R$97-297 |
-| 1 projeto n8n | R$500-1.000 |
-| **Total** | **R$800-1.900** |
-
-### Mês 3-6 (com base de clientes)
-| Fonte | Valor |
-|---|---|
-| Golem + bandwidth | R$200-600 |
-| 3 clientes API recorrentes | R$291-891 |
-| 2 retainers n8n | R$594-1.594 |
-| Conteúdo IA (fotos/vídeos) | R$500-1.500 |
-| 2 arbitragens (newsletters/monitores) | R$194-594 |
-| **Total** | **R$1.779-5.179** |
-
-### Mês 6+ (no piloto automático)
-**R$3.000-8.000/mês com ~1h/semana de trabalho ativo**
-
----
-
-## 🆘 Problemas Comuns
-
-**Serviço caiu:**
-```bash
-docker ps  # ver o que está rodando
-docker compose up -d  # na pasta do serviço
-```
-
-**GPU travada:**
-```bash
-~/income-services/shared/gpu-lock.sh status
-~/income-services/shared/gpu-lock.sh [serviço] stop
-```
-
-**n8n workflow não ativa:**
-- Verifique se a credencial Telegram está configurada no n8n
-- n8n → Credentials → New → Telegram → cole o token
-
-**Golem parou:**
-```bash
-sg kvm -c "golemsp run" &
-```
-
-**Ver logs de qualquer serviço:**
-```bash
-docker logs [nome-container] --tail 50
-# Exemplos: n8n, litellm-proxy, cloudflared
-```
-
----
-
-## ✅ Checklist de Ativação (faça em ordem)
-
-- [ ] **1. Telegram** — @BotFather → token + chat_id → nano ~/.gpu-scheduler.env
-- [ ] **2. Resend** — resend.com → verificar domínio ativadata.com → API key → n8n variable
-- [ ] **3. Stripe** — criar produtos → webhook → credencial no n8n
-- [ ] **4. money4band** — criar 7 contas → preencher .env → python3 main.py → docker compose up -d
-- [ ] **5. Landing page** — ativadata.com com links Stripe
-- [ ] **6. Primeiro post LinkedIn** — copiar template da seção 2.1
-- [ ] **7. Primeiro gig no 99freelas** — copiar template da seção 2.2
-- [ ] **8. ComfyUI** — `cd ~/income-services/ai-content && docker compose up -d`
-
-**Depois disso: o sistema funciona sozinho. Você só traz clientes.**
-
----
-
-*Última atualização: gerado automaticamente pelo Copilot CLI*
+*Última atualização: 2026-03-28*
 *Repo: https://github.com/yubarrdevo/apps-to-make-money*

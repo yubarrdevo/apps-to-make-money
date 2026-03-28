@@ -1,235 +1,279 @@
-# O Que Está Rodando Nesse Servidor? — Para Leigos
+# O Que Está Rodando Nesse Servidor? — Para Leigos (Versão Simplificada)
 
-> Explicação simples de cada serviço, sem termos técnicos.
+> Explicação simples e focada: um serviço principal (ComfyUI), poucos serviços de apoio.
 
 ---
 
-## O Servidor
+## 🖥️ O Servidor
 
 Imagina um computador muito potente, ligado 24 horas por dia, na casa do Yuri em São Paulo.
-Ele tem uma placa de vídeo profissional (a mesma usada para jogos pesados e IA), 60GB de memória e conexão de 2Gbps — mais rápido que qualquer escritório normal.
 
-Em vez de ficar parado, esse computador está **trabalhando e gerando dinheiro o tempo todo**, em vários serviços ao mesmo tempo.
+Ele tem:
+- **Placa de vídeo profissional** (RTX 3060 12GB) — igual a que gamers usam, mas aqui é para IA
+- **60GB de memória** — equivalente a 15 notebooks comuns
+- **Conexão de 2Gbps** — 40x mais rápida que internet residencial normal
+
+Em vez de ficar parado, esse computador **trabalha e gera dinheiro 24/7**.
 
 ---
 
-## Os Serviços, Explicados Simples
+## 🎯 Filosofia Nova: Um Serviço, Dominado
+
+**Antes:** Vários serviços diferentes (IA de texto, IA de imagem, vídeo, etc.) — muita complexidade, pouco resultado.
+
+**Agora:** **Um serviço principal (ComfyUI)**, alguns serviços de apoio. Foco em executar bem uma coisa só.
 
 ---
 
-### 🤖 API de Inteligência Artificial Privada
-**Link:** https://llm.ativadata.com
+## 🎨 ComfyUI — O Serviço Principal (80% do Foco)
 
 **O que é:**
-É como o ChatGPT, mas hospedado aqui no Brasil, no servidor do Yuri.
-
-**Por que alguém pagaria por isso:**
-- Empresas que usam o ChatGPT mandam os dados dos seus clientes para os EUA toda vez que fazem uma pergunta.
-- Com essa API, os dados ficam em São Paulo. Isso é obrigatório para muitas empresas por causa da LGPD (lei de proteção de dados brasileira).
-- Desenvolvedores podem trocar o ChatGPT por essa API **sem mudar nada no código** — só mudam um endereço.
-
-**Quem usa:** Empresas de tecnologia, escritórios de advocacia, agências de marketing, e-commerces.
-
-**Quanto custa para o cliente:** R$97 a R$597 por mês.
-
----
-
-### ⚙️ n8n — Automação de Processos
-**Link:** https://n8n.atividada.com.br (uso interno)
-
-**O que é:**
-É uma ferramenta que conecta sistemas e automatiza tarefas repetitivas. Pensa nela como um "robô de escritório" que faz coisas sozinho.
-
-**Exemplos do que ela faz aqui:**
-- Quando um cliente paga, ela automaticamente cria o acesso dele e manda as credenciais por email — sem ninguém precisar fazer nada
-- Todo dia às 10h, ela manda pedidos para gerar vídeos automaticamente
-- Ela pode pegar uma planilha de produtos e escrever descrições para todos eles usando IA
-
-**Quem usa:** Empresas que querem automatizar relatórios, envios de email, atualização de sistemas, etc.
-
-**Quanto custa para o cliente:** R$500 a R$2.500 para construir + R$297/mês para manutenção.
-
----
-
-### 🎬 MoneyPrinter — Gerador de Vídeos Automático
-**Link:** https://moneyprinter.atividata.com.br (uso interno)
-
-**O que é:**
-Um sistema que cria vídeos curtos (tipo YouTube Shorts ou Reels) de forma totalmente automática, usando IA.
-
-**Como funciona:**
-1. A IA escolhe um assunto em alta
-2. Escreve o roteiro
-3. Gera as imagens
-4. Monta o vídeo com narração
-5. Entrega pronto para publicar
-
-**Por que existe:** Para gerar conteúdo no YouTube que, com o tempo, gera receita de publicidade (AdSense) sem trabalho manual.
-
----
-
-### 🎨 ComfyUI — Gerador de Imagens com IA
-**Link:** https://studio.atividata.com.br
-
-**O que é:**
-Um estúdio de criação de imagens com inteligência artificial. Pensa no Photoshop, mas em vez de editar, você descreve o que quer e a IA cria.
+Um estúdio de criação de imagens com inteligência artificial. Você descreve ou envia uma foto, a IA transforma.
 
 **O que produz:**
-- Fotos de produto com fundo branco profissional (para vender no Mercado Livre, Shopee, etc.)
-- Imagens de lifestyle (produto em cenários bonitos)
-- Variações de imagem para A/B test de anúncios
+- **Fotos de produto com fundo branco profissional** — para vender no Mercado Livre, Shopee, Instagram
+- **Imagens lifestyle** — produto em cenários bonitos (sala decorada, mesa arrumada, etc.)
+- **Variações de imagem** — mesma foto, vários estilos (para teste A/B em anúncios)
 
-**Quem usa:** Vendedores de e-commerce que precisam de fotos profissionais sem contratar fotógrafo.
+**Por que isso dá dinheiro:**
+Vendedores online precisam de fotos profissionais, mas:
+- Fotógrafo custa R$200-500 por sessão
+- ComfyUI custa R$0 depois de configurado
+- Resultado em 30 segundos vs. dias de espera
 
-**Quanto custa para o cliente:** R$15 por imagem, R$497/mês por pacote.
+**Quanto custa para o cliente:**
+- R$15 por foto avulsa
+- R$120 pack de 10 fotos
+- R$497/mês para 20 fotos (assinatura mensal)
+
+**Quanto gera:**
+- 3 clientes mensais = R$1.500/mês
+- 10 clientes mensais = R$5.000/mês
+
+**Tempo de trabalho:**
+30 minutos por dia (processar imagens em lote).
 
 ---
 
-### 📊 Coolify — Gerenciador do Servidor
-**Link:** https://coolify.atividata.com.br (uso interno)
+## ⚙️ n8n — Serviço de Apoio (Automação)
 
 **O que é:**
-É o "painel de controle" do servidor. Igual ao cPanel de hospedagem, mas muito mais poderoso.
+Um "robô de escritório digital" que faz tarefas repetitivas automaticamente.
 
-**Para que serve:**
-Permite subir novos serviços, ver o que está rodando, configurar domínios, tudo por uma interface visual. Só o Yuri acessa.
+**O que faz aqui:**
+- Cliente envia foto → notificação automática no Telegram
+- ComfyUI termina de processar → envia email com as fotos prontas automaticamente
+- Alguém paga via Stripe → cria acesso e envia credenciais sem ninguém precisar fazer nada
+
+**Por que existe:**
+Para você não precisar ficar copiando e colando coisas, mandando emails manualmente, etc.
+
+**Quanto gera (opcional):**
+Você pode vender automações customizadas:
+- R$500-1.500 por projeto (configuração única)
+- R$297/mês para manutenção
+
+Mas isso é **opcional** — só se você quiser ganhar dinheiro extra vendendo automações.
 
 ---
 
-### 🐳 Portainer — Gerenciador de Containers
-**Link:** https://portainer.atividata.com.br (uso interno)
+## 🤖 LiteLLM — Serviço de Apoio (API de IA)
 
 **O que é:**
-Mostra todos os "programas" (containers) que estão rodando no servidor, quanto de memória e CPU cada um usa, e permite reiniciar ou parar qualquer um.
+Um "tradutor" que faz seu servidor falar a mesma língua que o ChatGPT.
 
-Analogia: é como o Gerenciador de Tarefas do Windows, mas para o servidor todo.
+**Por que alguém pagaria por isso:**
+Empresas brasileiras que usam ChatGPT estão mandando dados dos clientes para os EUA toda vez. Isso pode ser ilegal (LGPD).
 
----
+Com essa API:
+- Dados ficam no Brasil
+- Empresas ficam dentro da lei
+- Código dos desenvolvedores continua funcionando (só mudam um endereço)
 
-### 🎵 Emby — Servidor de Mídia
-**Link:** https://emby.atividata.com.br
+**Quanto custa para o cliente:**
+- R$97-297/mês por empresa
 
-**O que é:**
-É como um Netflix pessoal. Armazena filmes, séries e músicas no servidor e permite assistir de qualquer lugar, em qualquer dispositivo.
+**Quanto gera (opcional):**
+R$300-900/mês se você tiver 3-5 empresas usando.
 
----
-
-### 🌐 Golem Network — Computação Descentralizada
-*Sem link público — funciona nos bastidores*
-
-**O que é:**
-Uma rede global onde pessoas alugam poder computacional umas das outras, como um Airbnb de computadores.
-
-**O que o servidor faz:**
-Quando a placa de vídeo e o processador não estão ocupados com outros serviços, eles ficam disponíveis nessa rede. Outras pessoas ao redor do mundo alugam esse poder para rodar programas pesados, e o servidor recebe pagamento em criptomoeda automaticamente.
-
-**Quanto gera:** R$100 a R$450/mês de forma completamente passiva.
+Mas é **secundário** — só adicione se tiver demanda.
 
 ---
 
-### 📡 Bandwidth Sharing — Compartilhamento de Internet
-*Sem link público — funciona nos bastidores*
+## 🌐 Golem & Bandwidth Sharing — Renda Passiva (Separado)
 
-**O que é:**
-O servidor compartilha uma pequena parte da sua conexão de internet com empresas que precisam de IPs residenciais brasileiros para pesquisa de mercado, verificação de preços, etc.
+**O que são:**
+Serviços que rodam sozinhos, sem você fazer nada.
 
-**Analogia:** É como alugar um quarto vazio — você não usa, mas alguém paga para ter acesso.
+**Golem:** Quando a placa de vídeo está ociosa, outras pessoas no mundo alugam ela para rodar programas pesados. Você recebe em criptomoeda.
 
-**Plataformas:** Honeygain, EarnApp, Pawns, PacketStream e outras.
+**Bandwidth Sharing:** Uma pequena parte da sua internet (que você não usa) é alugada para empresas de pesquisa de mercado.
 
-**Quanto gera:** R$115 a R$230/mês sem fazer absolutamente nada.
+**Quanto gera:**
+- Golem: R$100-400/mês
+- Bandwidth: R$100-200/mês
+
+**Total passivo:** R$200-600/mês sem fazer nada.
 
 ---
 
-## Como Tudo Se Conecta
+## 🔄 Como Tudo Se Conecta (Fluxo Simples)
 
 ```
-Cliente quer API de IA
-    → Paga via cartão (Stripe)
-    → Sistema detecta o pagamento automaticamente
-    → Cria o acesso do cliente sem ninguém precisar fazer nada
-    → Manda as credenciais por email automaticamente
-    → Cliente começa a usar a API
-
-Enquanto isso, nos bastidores:
-    → Vídeos sendo gerados automaticamente todo dia
-    → Golem gerando renda com poder computacional ocioso
-    → Bandwidth sharing gerando renda com internet ociosa
-    → Sistema monitorando tudo e mandando alertas no Telegram se algo der errado
+1. Vendedor do Mercado Livre vê anúncio seu no Facebook
+   ↓
+2. Manda mensagem: "Quero fotos profissionais"
+   ↓
+3. Você pede foto do produto
+   ↓
+4. Abre ComfyUI → arrasta foto → processa (30 segundos)
+   ↓
+5. Manda foto processada de volta
+   ↓
+6. Vendedor paga R$15-497
+   ↓
+7. Repete 10-20 vezes por dia (30 min/dia)
+   ↓
+8. Fim do mês: R$2.000-5.000 na conta
 ```
+
+**Enquanto isso, nos bastidores:**
+- Golem gerando R$100-400 sozinho
+- Bandwidth gerando R$100-200 sozinho
+- n8n automatizando notificações e emails
 
 ---
 
-## O Que É Totalmente Automático
+## 💰 Resumo Financeiro Simples
+
+### Mês 1-2 (Começando)
+
+| O quê | Quanto |
+|-------|--------|
+| ComfyUI (2-3 clientes) | R$800-1.500 |
+| Golem + Bandwidth | R$200-400 |
+| **Total** | **R$1.000-1.900** |
+
+**Trabalho:** 30 min/dia + 1 hora/semana buscando clientes
+
+### Mês 3-6 (Crescendo)
+
+| O quê | Quanto |
+|-------|--------|
+| ComfyUI (5-8 clientes) | R$2.000-4.000 |
+| Golem + Bandwidth | R$200-400 |
+| n8n (projetos extras) | R$500-1.500 |
+| **Total** | **R$2.700-5.900** |
+
+**Trabalho:** 30-45 min/dia
+
+### Mês 6+ (Estável)
+
+| O quê | Quanto |
+|-------|--------|
+| ComfyUI (10+ clientes) | R$4.000-8.000 |
+| Automações n8n | R$800-2.000 |
+| API LLM (opcional) | R$300-900 |
+| Golem + Bandwidth | R$300-600 |
+| **Total** | **R$5.400-11.500** |
+
+**Trabalho:** 1-2 horas/dia (pode contratar alguém para atender clientes)
+
+---
+
+## 🎯 O Que Mudou (Antes vs. Agora)
+
+### ❌ Antes (Complexo Demais)
+
+- **vLLM** — IA de texto pesada usando GPU (competia com ComfyUI)
+- **GPU Scheduler** — sistema complexo para decidir quem usa a GPU
+- **MoneyPrinter** — geração automática de vídeos (legal, mas pouca demanda)
+- **Muitos serviços** rodando ao mesmo tempo
+
+**Resultado:** Docker sobrecarregado, servidor instável, pouco foco.
+
+### ✅ Agora (Simples e Focado)
+
+- **ComfyUI** — único serviço usando GPU, sem competição
+- **n8n** — automação de apoio (opcional)
+- **LiteLLM** — API de IA (opcional, CPU-only, não compete com ComfyUI)
+- **Monitoramento** — alertas automáticos se algo cair
+
+**Resultado:** Estável, confiável, fácil de escalar.
+
+---
+
+## 🚀 Próximos Passos (Para o Usuário)
+
+### Esta Semana
+
+1. ✅ Servidor reconfigurado (ComfyUI como principal)
+2. ⏳ Baixar modelo FLUX (8GB, uma vez só)
+3. ⏳ Processar 10 fotos de teste (treinar o olho)
+4. ⏳ Enviar 10 mensagens para vendedores do Mercado Livre
+5. ⏳ Fechar primeiro cliente
+
+### Este Mês
+
+- [ ] 3 clientes ativos (R$1.500/mês)
+- [ ] Workflow otimizado (tempo/foto < 2 min)
+- [ ] Depoimentos e fotos antes/depois para marketing
+
+### Próximos 3 Meses
+
+- [ ] 10+ clientes ativos (R$5.000/mês)
+- [ ] Processo 100% automatizado (n8n)
+- [ ] Considerar contratar VA para atendimento
+
+---
+
+## ✅ O Que Está Automático
 
 | O quê | Frequência |
-|---|---|
-| Geração de vídeos para YouTube | Todo dia às 10h |
+|-------|------------|
 | Monitoramento de saúde dos serviços | A cada 15 minutos |
 | Backup dos dados | Todo dia às 4h |
-| Atualização do código no GitHub | A cada hora |
-| Provisão de novos clientes | Imediatamente ao pagar |
-| Alertas de problema no Telegram | Em tempo real |
+| Alertas se algo der errado | Tempo real (Telegram) |
 | Renda do Golem | Contínua |
 | Renda de bandwidth | Contínua |
 
 ---
 
-## Resumo Financeiro Esperado
+## 🆘 Se Algo Der Errado
 
-| Fonte | Quando começa | Estimativa mensal |
-|---|---|---|
-| Golem (computação) | Já está rodando | R$100–400 |
-| Bandwidth sharing | Após criar contas | R$100–200 |
-| API de IA (1 cliente básico) | Após primeiro cliente | R$97/mês |
-| API de IA (1 cliente pro) | Após primeiro cliente | R$297/mês |
-| API de IA (1 cliente custom) | Após primeiro cliente | R$597/mês |
-| Automação n8n (projeto único) | Após primeiro projeto | R$500–2.500 único |
-| Retainer n8n (manutenção) | Após fechar contrato | R$297–797/mês |
-| Monitor de preços (por loja) | Após primeiro cliente | R$297/mês |
-| Newsletter IA (por nicho) | Após primeiro cliente | R$97/mês |
-| Fotos de produto (por imagem) | Após ComfyUI subir | R$15–50/imagem |
-| Pacote fotos mensal | Após ComfyUI subir | R$497/mês por cliente |
-| Vídeo de produto | Após ComfyUI subir | R$97–297 por vídeo |
-| YouTube Shorts (AdSense) | 30–90 dias para monetizar | R$50–500/mês |
+**ComfyUI parou:**
+```bash
+docker restart comfyui
+```
 
-### Cenários Reais
+**GPU travada:**
+```bash
+nvidia-smi  # checar status
+docker restart comfyui  # reiniciar
+```
 
-**Mês 1–2 (começando do zero, só 1 cliente de cada):**
-| O quê | Valor |
-|---|---|
-| Golem + bandwidth | R$200 |
-| 1 cliente API básica | R$97 |
-| 1 projeto n8n | R$800 |
-| 3 packs de foto | R$450 |
-| **Total** | **~R$1.550/mês** |
+**Disco cheio:**
+```bash
+docker system prune -a  # limpar Docker antigo
+```
 
-**Mês 3–6 (base de clientes crescendo):**
-| O quê | Valor |
-|---|---|
-| Golem + bandwidth | R$300 |
-| 3 clientes API (1 básico + 1 pro + 1 custom) | R$991 |
-| 2 retainers n8n | R$800 |
-| 3 monitores de preço | R$891 |
-| 2 newsletters IA | R$194 |
-| Fotos/vídeos avulsos | R$600 |
-| **Total** | **~R$3.776/mês** |
-
-**Mês 6+ (no piloto automático):**
-| O quê | Valor |
-|---|---|
-| Golem + bandwidth | R$400 |
-| 5 clientes API | R$1.485 |
-| 3 retainers n8n | R$1.500 |
-| 5 monitores de preço | R$1.485 |
-| 4 newsletters IA | R$388 |
-| Fotos/vídeos | R$1.000 |
-| YouTube AdSense | R$300 |
-| **Total** | **~R$6.558/mês** |
-
-> 💡 Com menos de 1 hora de trabalho por semana — o servidor faz o resto.
+**Dúvidas:**
+- Checar `GUIA-COMPLETO.md` (documentação técnica)
+- Ver logs: `docker logs comfyui`
 
 ---
 
-*Este servidor foi configurado e está sendo mantido automaticamente.*
-*Dúvidas: fala com o Yuri.*
+## 🎓 Analogia Final
+
+**Antes:** Você tinha uma padaria que fazia pão, bolo, salgado, doce, pizza... tudo ao mesmo tempo. Ficava caótico, estouro de fornos, produtos queimando.
+
+**Agora:** Você tem uma padaria **especializada em pão francês**. Faz um produto só, mas faz perfeito. Clientes sabem que você é o melhor em pão francês. Consegue atender 10x mais gente com menos esforço.
+
+ComfyUI = pão francês
+Outros serviços = opcionais se sobrar tempo
+
+---
+
+**Última atualização:** 2026-03-28
+**Foco:** ComfyUI (fotos de produto IA) → R$2-5k/mês
+**Próximo milestone:** 3 clientes ativos
