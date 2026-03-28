@@ -1,6 +1,6 @@
 #!/bin/bash
 # health-check.sh - runs every 15 min via cron
-# Checks all services and alerts via Telegram when something is down
+# Simplified: focuses on ComfyUI + essential services only
 
 ALERT="/home/yuri/apps-to-make-money/infra/monitoring/telegram-alert.sh"
 LOG="/home/yuri/income-services/shared/logs/health-$(date +%Y%m%d).log"
@@ -31,23 +31,22 @@ check_container() {
   fi
 }
 
-log "=== Health Check ==="
+log "=== Health Check - Focused Stack ==="
 
-# Core services
+# Core revenue service
+check_container comfyui
+
+# Supporting services
 check_container n8n
 check_container n8n-db
 check_container litellm-proxy
 check_container litellm-db
-check_container backend      # MoneyPrinter
-check_container worker
-check_container postgres
-check_container coolify
 
 # HTTP endpoints
-check_service "LiteLLM API"    "http://localhost:4000/health"
-check_service "n8n"            "http://localhost:5678/healthz"
-check_service "Ollama"         "http://localhost:11434/api/tags"
-check_service "MoneyPrinter"   "http://localhost:8080/api/models"
+check_service "ComfyUI (PRIMARY)" "http://localhost:8188"
+check_service "n8n"               "http://localhost:5678/healthz"
+check_service "LiteLLM API"       "http://localhost:4000/health"
+check_service "Ollama"            "http://localhost:11434/api/tags"
 
 # GPU
 GPU_INFO=$(nvidia-smi --query-gpu=utilization.gpu,memory.used,temperature.gpu --format=csv,noheader 2>/dev/null)
