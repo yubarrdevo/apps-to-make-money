@@ -2,9 +2,11 @@
 # health-check.sh - runs every 15 min via cron
 # Simplified: focuses on ComfyUI + essential services only
 
-ALERT="/home/yuri/apps-to-make-money/infra/monitoring/telegram-alert.sh"
-LOG="/home/yuri/income-services/shared/logs/health-$(date +%Y%m%d).log"
-mkdir -p "$(dirname "$LOG")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ALERT="${SCRIPT_DIR}/telegram-alert.sh"
+LOG_DIR="${HOME}/income-services/shared/logs"
+LOG="${LOG_DIR}/health-$(date +%Y%m%d).log"
+mkdir -p "$LOG_DIR"
 
 log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOG"; }
 
@@ -48,9 +50,11 @@ check_service "n8n"               "http://localhost:5678/healthz"
 check_service "LiteLLM API"       "http://localhost:4000/health"
 check_service "Ollama"            "http://localhost:11434/api/tags"
 
-# GPU
-GPU_INFO=$(nvidia-smi --query-gpu=utilization.gpu,memory.used,temperature.gpu --format=csv,noheader 2>/dev/null)
-log "GPU: $GPU_INFO"
+# GPU (only if nvidia-smi available)
+if command -v nvidia-smi >/dev/null 2>&1; then
+  GPU_INFO=$(nvidia-smi --query-gpu=utilization.gpu,memory.used,temperature.gpu --format=csv,noheader 2>/dev/null || echo "unavailable")
+  log "GPU: $GPU_INFO"
+fi
 
 # Disk
 DISK_USE=$(df -h / | awk 'NR==2{print $5}' | tr -d '%')

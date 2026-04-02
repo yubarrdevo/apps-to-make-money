@@ -2,8 +2,9 @@
 # Usage: ./telegram-alert.sh "Your message here"
 # Reads TELEGRAM_TOKEN and TELEGRAM_CHAT_ID from env or shared .env file
 
-ENV_FILE="/home/yuri/income-services/shared/.gpu-scheduler.env"
+ENV_FILE="${HOME}/income-services/shared/.gpu-scheduler.env"
 if [ -f "$ENV_FILE" ]; then
+  # shellcheck source=/dev/null
   source "$ENV_FILE"
 fi
 

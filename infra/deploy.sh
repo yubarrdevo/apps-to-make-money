@@ -4,7 +4,8 @@
 
 set -e
 
-SERVICES_DIR="/home/yuri/apps-to-make-money/infra/services"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SERVICES_DIR="${SCRIPT_DIR}/services"
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -58,9 +59,17 @@ deploy_n8n() {
   cd "$SERVICES_DIR/n8n"
 
   if [ ! -f ".env" ]; then
-    warn "No .env file found. Creating from example..."
+    log "Creating .env with generated secrets..."
     cp .env.example .env
-    echo "⚠️  Edit .env and set passwords before running in production"
+    local db_pass enc_key admin_pass
+    db_pass=$(openssl rand -hex 16)
+    enc_key=$(openssl rand -hex 32)
+    admin_pass=$(openssl rand -hex 12)
+    sed -i "s/^N8N_DB_PASSWORD=CHANGE_ME/N8N_DB_PASSWORD=${db_pass}/" .env
+    sed -i "s/^N8N_ENCRYPTION_KEY=CHANGE_ME/N8N_ENCRYPTION_KEY=${enc_key}/" .env
+    sed -i "s/^N8N_PASSWORD=CHANGE_ME/N8N_PASSWORD=${admin_pass}/" .env
+    success "Generated .env — admin password: ${admin_pass}"
+    echo "  ⚠️  Save this password! It won't be shown again."
   fi
 
   docker compose up -d
@@ -73,15 +82,21 @@ deploy_litellm() {
   cd "$SERVICES_DIR/litellm"
 
   if [ ! -f ".env" ]; then
-    warn "No .env file found. Creating from example..."
+    log "Creating .env with generated secrets..."
     cp .env.example .env
-    echo "⚠️  Edit .env and set DATABASE_URL password"
+    local db_pass master_key
+    db_pass=$(openssl rand -hex 16)
+    master_key="sk-$(openssl rand -hex 32)"
+    sed -i "s/^LITELLM_DB_PASSWORD=CHANGE_ME/LITELLM_DB_PASSWORD=${db_pass}/" .env
+    sed -i "s/^LITELLM_MASTER_KEY=CHANGE_ME/LITELLM_MASTER_KEY=${master_key}/" .env
+    success "Generated .env — master key: ${master_key}"
+    echo "  ⚠️  Save this key! Clients use it to access the API."
   fi
 
   # Check Ollama
-  if ! systemctl is-active --quiet ollama; then
-    warn "Ollama service not running. Starting..."
-    sudo systemctl start ollama || error "Failed to start Ollama"
+  if command -v systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet ollama 2>/dev/null; then
+    warn "Ollama service not running. LiteLLM needs Ollama for model inference."
+    echo "  Start with: sudo systemctl start ollama"
   fi
 
   docker compose up -d

@@ -1,5 +1,6 @@
 #!/bin/bash
-cd /home/yuri/apps-to-make-money || exit 1
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPO_DIR" || exit 1
 git add -A
 if ! git diff --cached --quiet; then
   MSG="chore: auto-sync $(date '+%Y-%m-%d %H:%M SP')"
