@@ -28,14 +28,9 @@ model_list:
 
 # General settings
 general_settings:
-  master_key: ${LITELLM_MASTER_KEY}
-  database_url: ${DATABASE_URL}
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/DATABASE_URL
 
-# Enable usage tracking
+# LiteLLM behavior settings
 litellm_settings:
-  success_callback: ["langfuse"]
   drop_params: true
-
-# Rate limiting (optional)
-router_settings:
-  redis_host: null  # No Redis needed for single-server setup

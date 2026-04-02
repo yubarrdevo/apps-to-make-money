@@ -5,6 +5,7 @@ services:
     environment:
       POSTGRES_DB: litellm
       POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: ${LITELLM_DB_PASSWORD}
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +23,9 @@ services:
     volumes:
       - ./config.yaml:/app/config.yaml
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      # DATABASE_URL must match the user/password/host/db from litellm-db above
+      - DATABASE_URL=postgresql://litellm:${LITELLM_DB_PASSWORD}@litellm-db:5432/litellm
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command: --config /app/config.yaml --port 4000 --num_workers 2
