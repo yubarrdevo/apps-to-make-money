@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ativadata — IA para o seu negócio</title>
+  <meta name="description" content="API de IA e geração de imagens profissionais para e-commerce. Automatize seu negócio com inteligência artificial.">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #22d3ee;
+      --border: #334155;
+      --success: #10b981;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .logo span { color: var(--text); }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 32px;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero h1 .highlight { color: var(--accent); }
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--text-muted); }
+
+    /* Section headings */
+    .section-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-title h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-title p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Services */
+    .services { padding: 80px 0; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    .service-card:hover { border-color: var(--primary); }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .service-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .service-card ul {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .service-card li {
+      padding: 6px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .service-card li::before {
+      content: "✓ ";
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Pricing */
+    .pricing { padding: 80px 0; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .pricing-card:hover { border-color: var(--primary); }
+    .pricing-card.featured {
+      border-color: var(--primary);
+    }
+    .pricing-card.featured::before {
+      content: "Mais Popular";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #fff;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .pricing-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+    .pricing-card .price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 16px 0;
+    }
+    .pricing-card .price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+    .pricing-card .price-note {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+    .pricing-card ul {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    .pricing-card li {
+      padding: 8px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-card li:last-child { border-bottom: none; }
+    .pricing-card li::before {
+      content: "✓ ";
+      color: var(--success);
+      font-weight: 700;
+    }
+    .pricing-card .btn { width: 100%; text-align: center; }
+
+    /* ComfyUI Pricing */
+    .comfyui-pricing { padding: 80px 0; }
+    .comfyui-pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .comfyui-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .comfyui-card:hover { border-color: var(--accent); }
+    .comfyui-card h3 { font-size: 1.1rem; margin-bottom: 12px; }
+    .comfyui-card .price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .comfyui-card .price span {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+    .comfyui-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    /* API Demo */
+    .api-demo { padding: 60px 0; }
+    .code-block {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 0.85rem;
+      color: #c9d1d9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .code-block .comment { color: #8b949e; }
+    .code-block .string { color: #a5d6ff; }
+    .code-block .key { color: #ff7b72; }
+
+    /* FAQ */
+    .faq { padding: 80px 0; }
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 12px;
+    }
+    .faq-item h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .faq-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 80px 0;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(34,211,238,0.1));
+      border-radius: 16px;
+      margin: 40px 0;
+    }
+    .cta h2 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .cta p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
+      nav { display: none; }
+      .pricing-grid, .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">ativa<span>data</span></a>
+      <nav>
+        <a href="#services">Serviços</a>
+        <a href="#pricing">Planos API</a>
+        <a href="#images">Imagens IA</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>IA para o <span class="highlight">seu negócio</span></h1>
+      <p>API de inteligência artificial e geração de imagens profissionais. Comece em minutos, escale sem limites.</p>
+      <div class="hero-buttons">
+        <a href="#pricing" class="btn btn-primary">Ver Planos API</a>
+        <a href="#images" class="btn btn-outline">Imagens para E-commerce</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-title">
+        <h2>Nossos Serviços</h2>
+        <p>Infraestrutura de IA pronta para usar</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🤖</div>
+          <h3>API de LLM</h3>
+          <p>API compatível com OpenAI. Use modelos de IA poderosos com a mesma interface que você já conhece.</p>
+          <ul>
+            <li>Compatível com OpenAI SDK</li>
+            <li>Modelos otimizados para português</li>
+            <li>Sem limite de contexto baixo</li>
+            <li>Dashboard de uso em tempo real</li>
+            <li>Chave de API em segundos após pagamento</li>
+          </ul>
+          <a href="#pricing" class="btn btn-primary">Ver Planos</a>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🎨</div>
+          <h3>Imagens para E-commerce</h3>
+          <p>Fotos profissionais de produtos geradas por IA. Perfeitas para Mercado Livre, Shopee e sua loja online.</p>
+          <ul>
+            <li>Fundo profissional removido/substituído</li>
+            <li>Qualidade de estúdio fotográfico</li>
+            <li>Entrega em até 24 horas</li>
+            <li>Pacotes mensais com desconto</li>
+            <li>Amostra grátis na primeira vez</li>
+          </ul>
+          <a href="#images" class="btn btn-primary">Ver Preços</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-title">
+        <h2>Planos API de IA</h2>
+        <p>Acesso instantâneo após o pagamento. Chave de API enviada por e-mail automaticamente.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Básico</h3>
+          <div class="price">R$97<span>/mês</span></div>
+          <p class="price-note">Ideal para testes e projetos pequenos</p>
+          <ul>
+            <li>10 requisições/minuto</li>
+            <li>100.000 tokens/minuto</li>
+            <li>Modelo gpt-3.5-turbo</li>
+            <li>Dashboard de uso</li>
+            <li>Suporte por e-mail</li>
+          </ul>
+          <a href="https://buy.stripe.com/fZu14g5OlaZ9cxGfMz8bS00" class="btn btn-outline">Assinar Básico</a>
+        </div>
+        <div class="pricing-card featured">
+          <h3>Pro</h3>
+          <div class="price">R$297<span>/mês</span></div>
+          <p class="price-note">Para aplicações em produção</p>
+          <ul>
+            <li>30 requisições/minuto</li>
+            <li>500.000 tokens/minuto</li>
+            <li>Todos os modelos disponíveis</li>
+            <li>Dashboard de uso</li>
+            <li>Suporte prioritário</li>
+          </ul>
+          <a href="https://buy.stripe.com/4gMcMY0u10kv1T243R8bS01" class="btn btn-primary">Assinar Pro</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Custom</h3>
+          <div class="price">R$597<span>/mês</span></div>
+          <p class="price-note">Para alta demanda e empresas</p>
+          <ul>
+            <li>100 requisições/minuto</li>
+            <li>2.000.000 tokens/minuto</li>
+            <li>Todos os modelos + embeddings</li>
+            <li>Dashboard de uso</li>
+            <li>Suporte dedicado via WhatsApp</li>
+          </ul>
+          <a href="https://buy.stripe.com/28E4gsccJ1oz0OY2ZN8bS02" class="btn btn-outline">Assinar Custom</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="api-demo">
+    <div class="container">
+      <div class="section-title">
+        <h2>Fácil de Integrar</h2>
+        <p>Use a mesma interface da OpenAI. Troque apenas a URL e a chave.</p>
+      </div>
+      <div class="code-block">
+        <span class="comment"># Substitua pela sua chave de API</span><br>
+        curl https://api.ativadata.com/v1/chat/completions \<br>
+        &nbsp;&nbsp;-H <span class="string">"Authorization: Bearer SUA_CHAVE_API"</span> \<br>
+        &nbsp;&nbsp;-H <span class="string">"Content-Type: application/json"</span> \<br>
+        &nbsp;&nbsp;-d <span class="string">'{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"model"</span>: "gpt-3.5-turbo",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"messages"</span>: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="key">"role"</span>: "user", <span class="key">"content"</span>: "Olá!"}
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+        &nbsp;&nbsp;}'</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="comfyui-pricing" id="images">
+    <div class="container">
+      <div class="section-title">
+        <h2>Imagens Profissionais com IA</h2>
+        <p>Fotos de produto com qualidade de estúdio. Geradas por IA em minutos.</p>
+      </div>
+      <div class="comfyui-pricing-grid">
+        <div class="comfyui-card">
+          <h3>Foto Avulsa</h3>
+          <div class="price">R$15<span>/foto</span></div>
+          <p>Uma imagem profissional do seu produto com fundo editado.</p>
+          <a href="https://wa.me/5500000000000?text=Quero%20uma%20foto%20profissional%20do%20meu%20produto" class="btn btn-outline">Solicitar</a>
+        </div>
+        <div class="comfyui-card">
+          <h3>Pacote 10 Fotos</h3>
+          <div class="price">R$120<span>/pacote</span></div>
+          <p>10 imagens profissionais. Ideal para novos anúncios.</p>
+          <a href="https://wa.me/5500000000000?text=Quero%20o%20pacote%20de%2010%20fotos" class="btn btn-outline">Solicitar</a>
+        </div>
+        <div class="comfyui-card">
+          <h3>Mensal 20 Fotos</h3>
+          <div class="price">R$497<span>/mês</span></div>
+          <p>20 fotos por mês com prioridade na entrega.</p>
+          <a href="https://wa.me/5500000000000?text=Quero%20o%20plano%20mensal%20de%2020%20fotos" class="btn btn-outline">Solicitar</a>
+        </div>
+        <div class="comfyui-card">
+          <h3>Mensal 50 Fotos</h3>
+          <div class="price">R$997<span>/mês</span></div>
+          <p>50 fotos por mês. Para lojas com alto volume.</p>
+          <a href="https://wa.me/5500000000000?text=Quero%20o%20plano%20mensal%20de%2050%20fotos" class="btn btn-outline">Solicitar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>Perguntas Frequentes</h2>
+      </div>
+      <div class="faq-item">
+        <h3>Como recebo minha chave de API?</h3>
+        <p>Após o pagamento, você recebe automaticamente por e-mail em segundos. Incluímos a chave, o endpoint e um exemplo de uso pronto.</p>
+      </div>
+      <div class="faq-item">
+        <h3>É compatível com a API da OpenAI?</h3>
+        <p>Sim. Basta trocar a URL base para api.ativadata.com e usar sua chave. Funciona com qualquer SDK ou biblioteca que suporte a OpenAI.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Quais modelos estão disponíveis?</h3>
+        <p>Oferecemos modelos otimizados equivalentes ao gpt-3.5-turbo, com excelente performance em português. Modelos de embeddings também estão disponíveis.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Como funciona o serviço de imagens?</h3>
+        <p>Envie a foto do seu produto por WhatsApp, escolha o estilo desejado e receba as imagens profissionais em até 24 horas. A primeira foto é grátis para você testar.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Posso cancelar a qualquer momento?</h3>
+        <p>Sim. Todos os planos são mensais sem fidelidade. Cancele quando quiser pelo painel do Stripe.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="cta">
+      <h2>Pronto para começar?</h2>
+      <p>Comece com o plano Básico e escale conforme sua necessidade.</p>
+      <div class="hero-buttons">
+        <a href="https://buy.stripe.com/fZu14g5OlaZ9cxGfMz8bS00" class="btn btn-primary">Começar com R$97/mês</a>
+        <a href="https://wa.me/5500000000000?text=Quero%20saber%20mais%20sobre%20os%20serviços" class="btn btn-outline">Falar no WhatsApp</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ativadata.com — Inteligência artificial para o seu negócio</p>
+      <p style="margin-top: 8px;">
+        <a href="https://api.ativadata.com/health">Status da API</a> &middot;
+        <a href="mailto:contato@ativadata.com">contato@ativadata.com</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
