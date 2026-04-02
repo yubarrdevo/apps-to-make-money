@@ -5,7 +5,9 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "stripe-webhook",
-        "options": {}
+        "options": {
+          "rawBody": true
+        }
       },
       "id": "stripe-webhook",
       "name": "Stripe Webhook",
@@ -16,7 +18,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const event = $input.first().json;\n// Only process completed checkout sessions\nif (event.type !== 'checkout.session.completed') {\n  return [];\n}\nconst session = event.data.object;\nconst plan = session.metadata?.plan || 'basic';\nconst limits = {\n  basic:  { rpm: 10,  tpm: 100000,  budget: 50 },\n  pro:    { rpm: 30,  tpm: 500000,  budget: 200 },\n  custom: { rpm: 100, tpm: 2000000, budget: 1000 }\n};\nreturn [{\n  json: {\n    email: session.customer_details?.email,\n    name: session.customer_details?.name,\n    plan,\n    amount: session.amount_total / 100,\n    currency: session.currency,\n    ...limits[plan]\n  }\n}];"
+        "jsCode": "const crypto = require('crypto');\nconst webhookSecret = $env.STRIPE_WEBHOOK_SECRET;\nconst rawBody = $input.first().json.body;\nconst sigHeader = $input.first().json.headers['stripe-signature'];\n\n// Verify Stripe webhook signature if secret is configured\nif (webhookSecret && sigHeader) {\n  const elements = sigHeader.split(',');\n  const tsElement = elements.find(e => e.startsWith('t='));\n  const sigElement = elements.find(e => e.startsWith('v1='));\n  if (!tsElement || !sigElement) return [];\n  const timestamp = tsElement.split('=')[1];\n  const signature = sigElement.split('=')[1];\n  const payload = timestamp + '.' + (typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody));\n  const expected = crypto.createHmac('sha256', webhookSecret).update(payload).digest('hex');\n  if (signature !== expected) {\n    console.log('Invalid Stripe signature');\n    return [];\n  }\n  // Reject events older than 5 minutes\n  const age = Math.floor(Date.now() / 1000) - parseInt(timestamp);\n  if (age > 300) {\n    console.log('Stripe event too old:', age, 'seconds');\n    return [];\n  }\n}\n\nconst event = typeof rawBody === 'string' ? JSON.parse(rawBody) : $input.first().json;\n// Only process completed checkout sessions\nif (event.type !== 'checkout.session.completed') {\n  return [];\n}\nconst session = event.data.object;\nconst plan = session.metadata?.plan || 'basic';\nconst limits = {\n  basic:  { rpm: 10,  tpm: 100000,  budget: 50 },\n  pro:    { rpm: 30,  tpm: 500000,  budget: 200 },\n  custom: { rpm: 100, tpm: 2000000, budget: 1000 }\n};\nreturn [{\n  json: {\n    email: session.customer_details?.email,\n    name: session.customer_details?.name,\n    plan,\n    amount: session.amount_total / 100,\n    currency: session.currency,\n    ...limits[plan]\n  }\n}];"
       },
       "id": "parse-payment",
       "name": "Parse Payment",
