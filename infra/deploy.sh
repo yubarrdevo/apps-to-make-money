@@ -68,8 +68,8 @@ deploy_n8n() {
     sed -i "s/^N8N_DB_PASSWORD=CHANGE_ME/N8N_DB_PASSWORD=${db_pass}/" .env
     sed -i "s/^N8N_ENCRYPTION_KEY=CHANGE_ME/N8N_ENCRYPTION_KEY=${enc_key}/" .env
     sed -i "s/^N8N_PASSWORD=CHANGE_ME/N8N_PASSWORD=${admin_pass}/" .env
-    success "Generated .env — admin password: ${admin_pass}"
-    echo "  ⚠️  Save this password! It won't be shown again."
+    success "Generated .env with secure credentials"
+    echo "  Credentials saved in: $(pwd)/.env"
   fi
 
   docker compose up -d
@@ -89,14 +89,15 @@ deploy_litellm() {
     master_key="sk-$(openssl rand -hex 32)"
     sed -i "s/^LITELLM_DB_PASSWORD=CHANGE_ME/LITELLM_DB_PASSWORD=${db_pass}/" .env
     sed -i "s/^LITELLM_MASTER_KEY=CHANGE_ME/LITELLM_MASTER_KEY=${master_key}/" .env
-    success "Generated .env — master key: ${master_key}"
-    echo "  ⚠️  Save this key! Clients use it to access the API."
+    success "Generated .env with secure credentials"
+    echo "  Credentials saved in: $(pwd)/.env"
   fi
 
   # Check Ollama
   if command -v systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet ollama 2>/dev/null; then
     warn "Ollama service not running. LiteLLM needs Ollama for model inference."
-    echo "  Start with: sudo systemctl start ollama"
+    warn "Start with: sudo systemctl start ollama"
+    warn "Deploying LiteLLM anyway — it will retry connecting to Ollama."
   fi
 
   docker compose up -d

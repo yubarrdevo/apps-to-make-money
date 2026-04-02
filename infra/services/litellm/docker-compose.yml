@@ -23,6 +23,7 @@ services:
     volumes:
       - ./config.yaml:/app/config.yaml
     environment:
+      # DATABASE_URL must match the user/password/host/db from litellm-db above
       - DATABASE_URL=postgresql://litellm:${LITELLM_DB_PASSWORD}@litellm-db:5432/litellm
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
     extra_hosts:
