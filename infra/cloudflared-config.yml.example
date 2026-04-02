@@ -1,0 +1,42 @@
+# Cloudflare Tunnel Configuration Template
+# Copy this to ~/.cloudflared/config.yml and configure your tunnel
+
+tunnel: YOUR_TUNNEL_UUID
+credentials-file: /home/yuri/.cloudflared/YOUR_TUNNEL_UUID.json
+
+ingress:
+  # CLIENT-FACING (ativadata.com)
+  # These are the public APIs that clients will use
+  - hostname: llm.ativadata.com
+    service: http://localhost:4000
+  - hostname: api.ativadata.com
+    service: http://localhost:4000
+
+  # INTERNAL INFRA (atividata.com.br)
+  # These are internal admin/management interfaces
+  - hostname: n8n.atividata.com.br
+    service: http://localhost:5678
+  - hostname: studio.atividata.com.br
+    service: http://localhost:8188
+  - hostname: moneyprinter.atividata.com.br
+    service: http://localhost:8001
+  - hostname: moneyprinter-api.atividata.com.br
+    service: http://localhost:8080
+  - hostname: emby.atividata.com.br
+    service: http://localhost:8096
+  - hostname: coolify.atividata.com.br
+    service: http://localhost:8000
+  - hostname: portainer.atividata.com.br
+    service: https://localhost:9443
+    originRequest:
+      noTLSVerify: true
+
+  # Catch-all rule (must be last)
+  - service: http_status:404
+
+# To create a new tunnel:
+# 1. cloudflared tunnel login
+# 2. cloudflared tunnel create income-services
+# 3. Copy the UUID from the output to replace YOUR_TUNNEL_UUID above
+# 4. cloudflared tunnel route dns YOUR_TUNNEL_UUID llm.ativadata.com
+# 5. Repeat step 4 for each hostname above

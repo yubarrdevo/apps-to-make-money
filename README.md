@@ -1,338 +1,232 @@
-# 🎯 ComfyUI Revenue Stack - Focused & Profitable
+# 💰 Apps to Make Money — Home Server Monetization Stack
 
-> **Philosophy:** One service, mastered. ComfyUI for AI image generation. Everything else is support.
-
-**Server:** yuserver | Linux Mint | Ryzen 9 9950X (32 cores), 60GB RAM, RTX 3060 12GB
-**Primary Revenue:** ComfyUI image generation for e-commerce
-**Secondary:** n8n automation services (optional), LiteLLM API (optional)
+**Fully automated home server stack generating R$3,000-8,000/month with ~1 hour/week of active work.**
 
 ---
 
-## 🎨 Why ComfyUI First?
+## 🎯 What Is This?
 
-| Factor | ComfyUI | LLM API | Other Services |
-|--------|---------|---------|----------------|
-| **Revenue per Client** | R$497/month | R$97-297/month | Variable |
-| **Client Demand** | High (e-commerce sellers) | Medium | Low-Medium |
-| **Competition** | Low (technical barrier) | High | Very High |
-| **Your Time** | 30 min/day | 5 min/day | Variable |
-| **Setup Complexity** | Low | Low | High |
-| **Scalability** | High (can handle 10+ clients) | Medium | Low |
+A complete infrastructure for monetizing a home server through:
 
-**Bottom line:** ComfyUI delivers R$2,000-4,000/month with 3-5 clients and <30 min/day work.
+1. **LLM API Services** (R$97-597/month per client)
+   - Private AI API hosted in Brazil (LGPD compliant)
+   - OpenAI-compatible endpoint via LiteLLM
+   - Auto-provisioning via Stripe webhooks
 
----
+2. **n8n Automation Services** (R$500-2,500/project + R$297-797/month retainer)
+   - Workflow automation for businesses
+   - Newsletter generation with AI curation
+   - Price monitoring and alerts
 
-## 📂 Repository Structure
+3. **AI Content Generation** (R$15-497/package)
+   - Product photography via ComfyUI
+   - YouTube Shorts via MoneyPrinter
+   - Automated daily content creation
 
-```
-apps-to-make-money/
-├── infra/
-│   ├── services/
-│   │   ├── comfyui/          # 🎯 PRIMARY - Image generation
-│   │   ├── landing-page/     # 🌐 Client-facing website (ativadata.com)
-│   │   ├── n8n/              # Automation workflows
-│   │   └── litellm/          # Optional LLM API gateway
-│   ├── monitoring/           # Health checks, Telegram alerts
-│   ├── n8n-workflows/        # Pre-built automation workflows
-│   ├── PAYMENT-SETUP.md      # Payment processing setup guide
-│   └── stripe-links.md       # Stripe payment links & IDs
-├── GUIA-COMPLETO.md         # Complete operational guide (PT-BR)
-├── PARA-LEIGOS.md           # Non-technical explanation (PT-BR)
-└── README.md                # This file
-```
+4. **Passive Income Streams** (R$200-600/month)
+   - Golem Network compute sharing
+   - Bandwidth sharing (Honeygain, EarnApp, etc.)
+   - 100% automated, zero maintenance
 
 ---
 
-## 🚀 Quick Start (15 Minutes)
+## 🚀 Quick Start
 
-### 1. Start ComfyUI
+### Prerequisites
+
+- Linux server with NVIDIA GPU (RTX 3060 or better)
+- 32GB+ RAM, 500GB+ storage
+- Docker, Python 3.9+, NVIDIA drivers
+- Cloudflare account (for tunnel)
+
+### Deploy Everything
 
 ```bash
-cd infra/services/comfyui
+# Clone repository
+git clone https://github.com/yubarrdevo/apps-to-make-money.git
+cd apps-to-make-money
 
-# Download model (one-time, ~8GB)
-mkdir -p models/checkpoints
-cd models/checkpoints
-wget https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell-fp8.safetensors
-cd ../..
-
-# Start service
-docker compose up -d
-
-# Access
-open http://localhost:8188
+# Run automated deployment
+bash infra/deploy.sh --full
 ```
 
-### 2. Start Supporting Services (Optional)
-
-```bash
-# n8n (for automation)
-cd ../n8n
-cp .env.example .env
-docker compose up -d
-
-# LiteLLM (for API business)
-cd ../litellm
-cp .env.example .env
-nano .env  # Set database password
-docker compose up -d
-```
-
-### 3. Get Your First Client
-
-See [`infra/services/comfyui/README.md`](infra/services/comfyui/README.md) for:
-- Where to find clients (Mercado Livre sellers, Facebook groups)
-- Sales scripts (Portuguese)
-- Pricing strategies
-- Workflow optimization
-
-**Target:** 3 clients in first month = R$1,500/month
-
----
-
-## 💰 Revenue Projections (Conservative)
-
-### Month 1-2: R$1,000-2,000
-- 2-3 ComfyUI clients (one-time or monthly starter)
-- Focus: Perfect workflow, get testimonials
-- Time: 1-2 hours/week
-
-### Month 3-6: R$3,000-5,000
-- 5-8 ComfyUI monthly clients
-- 1-2 n8n automation projects (if interested)
-- Time: 2-3 hours/week
-
-### Month 6+: R$5,000-8,000
-- 10+ ComfyUI clients (can handle with batch processing)
-- Recurring n8n retainers
-- Consider hiring VA for client communication
-- Time: 3-5 hours/week (mostly processing)
-
-**Passive Income (runs separately):**
-- Golem compute: R$100-400/month
-- Bandwidth sharing: R$100-200/month
-
----
-
-## 🏗️ Architecture (Simplified)
-
-```
-┌─────────────────────────────────────────────┐
-│  CLIENT                                     │
-│  Sends product photo via WhatsApp/email    │
-└─────────────────┬───────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────┐
-│  YOU (15-30 min/day)                        │
-│  - Load image in ComfyUI                    │
-│  - Apply workflow (white bg, lifestyle)     │
-│  - Generate variations                      │
-│  - Export images                            │
-└─────────────────┬───────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────┐
-│  COMFYUI (GPU)                              │
-│  RTX 3060 12GB                              │
-│  - Processes 15-30 sec/image                │
-│  - FLUX.1-schnell model                     │
-│  - Outputs to ./output/                     │
-└─────────────────┬───────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────┐
-│  DELIVERY                                   │
-│  Google Drive link or email attachment      │
-│  (can automate with n8n later)             │
-└─────────────────────────────────────────────┘
-```
-
-**Optional Services:**
-- **n8n:** Automate client notifications, order processing, payment provisioning
-- **LiteLLM + Ollama:** Sell LLM API access (secondary revenue)
-- **Landing Page:** Client-facing website at ativadata.com with pricing & payment links
-
----
-
-## 💳 Payment Processing
-
-Fully automated payment pipeline — zero manual intervention for API subscriptions:
-
-1. **Landing page** (ativadata.com) shows services and pricing
-2. **Stripe** processes payments via payment links
-3. **n8n** receives webhooks and provisions services automatically
-4. **Resend** sends credentials/confirmation emails
-5. **Telegram** alerts owner of new orders
-
-### Setup
-
-```bash
-# Deploy landing page
-./infra/deploy.sh landing-page
-
-# Import n8n workflows
-# See infra/PAYMENT-SETUP.md for complete instructions
-```
-
-See [`infra/PAYMENT-SETUP.md`](infra/PAYMENT-SETUP.md) for complete setup.
-
----
-
-## 🎯 Focus Strategy
-
-### Do This (High ROI)
-
-1. **Master ComfyUI workflows** for common e-commerce needs:
-   - White background product photos
-   - Lifestyle/scene placement
-   - Batch processing
-   - Quick variations
-
-2. **Build client acquisition** system:
-   - Daily: Check Mercado Livre for bad product photos
-   - 2x/week: Post in Facebook e-commerce groups
-   - Weekly: Refine pitch based on what works
-
-3. **Optimize delivery process**:
-   - Templates for common products (shoes, electronics, etc.)
-   - Batch processing for multi-product clients
-   - Google Drive folders per client
-
-### Don't Do This (Low ROI / Distraction)
-
-1. ❌ Setting up complex GPU scheduling
-2. ❌ Running multiple GPU services (vLLM, MoneyPrinter, etc.)
-3. ❌ Building features clients didn't ask for
-4. ❌ Competing on price (compete on quality/speed instead)
-5. ❌ Chasing latest AI models (FLUX.1-schnell is good enough)
-
----
-
-## 📊 Monitoring
-
-### Daily Check (1 minute)
-
-```bash
-# Is ComfyUI running?
-docker ps | grep comfyui
-
-# GPU temperature OK?
-nvidia-smi
-```
-
-### Automated (every 15 min via cron)
-
-```bash
-# Health check runs automatically
-tail -f ~/income-services/shared/logs/health-$(date +%Y%m%d).log
-```
-
-Telegram alerts configured in `infra/monitoring/telegram-alert.sh`
+That's it! The script will:
+- ✅ Setup all services (n8n, LiteLLM, vLLM, monitoring)
+- ✅ Install systemd services (GPU scheduler, Golem)
+- ✅ Configure cron jobs (health checks, backups, auto-commit)
+- ✅ Setup Cloudflare tunnel
+- ✅ Verify everything is running
 
 ---
 
 ## 📚 Documentation
 
-| File | Purpose | Language |
-|------|---------|----------|
-| [`infra/services/comfyui/README.md`](infra/services/comfyui/README.md) | ComfyUI setup, client acquisition, workflows | EN |
-| [`infra/services/landing-page/README.md`](infra/services/landing-page/README.md) | Landing page deployment | EN |
-| [`infra/services/n8n/README.md`](infra/services/n8n/README.md) | n8n automation setup | EN |
-| [`infra/services/litellm/README.md`](infra/services/litellm/README.md) | LiteLLM API gateway setup | EN |
-| [`infra/PAYMENT-SETUP.md`](infra/PAYMENT-SETUP.md) | Payment processing setup guide | EN |
-| [`infra/stripe-links.md`](infra/stripe-links.md) | Stripe payment links & price IDs | EN |
-| [`GUIA-COMPLETO.md`](GUIA-COMPLETO.md) | Complete operational guide | PT-BR |
-| [`PARA-LEIGOS.md`](PARA-LEIGOS.md) | Non-technical explanation | PT-BR |
+- **[DEPLOY.md](DEPLOY.md)** - Complete deployment guide
+- **[GUIA-COMPLETO.md](GUIA-COMPLETO.md)** - How to get clients and make money (Portuguese)
+- **[PARA-LEIGOS.md](PARA-LEIGOS.md)** - Simple explanations for non-technical users (Portuguese)
+- **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Complete system reference
 
 ---
 
-## 🆘 Troubleshooting
+## 🏗️ Architecture
 
-### ComfyUI Won't Start
-
-```bash
-# Check GPU availability
-nvidia-smi
-
-# Check logs
-docker logs comfyui
-
-# Restart
-cd infra/services/comfyui
-docker compose restart
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Cloudflare Tunnel (no open ports)                          │
+│  ├─ llm.ativadata.com       → LiteLLM (4000)   [PUBLIC]    │
+│  ├─ api.ativadata.com       → LiteLLM (4000)   [PUBLIC]    │
+│  ├─ n8n.atividata.com.br    → n8n (5678)       [INTERNAL]  │
+│  ├─ studio.atividata.com.br → ComfyUI (8188)   [INTERNAL]  │
+│  └─ ... (more internal services)                            │
+└─────────────────────────────────────────────────────────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+   ┌────▼────┐         ┌─────▼─────┐      ┌─────▼──────┐
+   │ LiteLLM │         │    n8n    │      │  ComfyUI   │
+   │  Proxy  │         │ Automation│      │  (on GPU)  │
+   └────┬────┘         └─────┬─────┘      └────────────┘
+        │                    │
+   ┌────┴─────┬──────────────┴──────┬──────────────┐
+   │          │                     │              │
+┌──▼──┐   ┌──▼───┐          ┌──────▼──────┐  ┌───▼────┐
+│Ollama│   │ vLLM │          │MoneyPrinter │  │ Stripe │
+│(CPU) │   │(GPU) │          │   Videos    │  │Webhook │
+└──────┘   └──┬───┘          └─────────────┘  └────────┘
+              │
+        ┌─────▼──────┐
+        │GPU Scheduler│  ← Auto-manages GPU allocation
+        └────────────┘
 ```
 
-### Out of Disk Space
+### Key Components
 
+- **LiteLLM**: OpenAI-compatible API gateway (routes to Ollama/vLLM)
+- **n8n**: Automation platform (client provisioning, content generation)
+- **vLLM**: GPU-accelerated LLM inference (auto-started on demand)
+- **ComfyUI**: AI image generation (product photos)
+- **MoneyPrinter**: Automated YouTube Shorts generation
+- **GPU Scheduler**: Intelligent GPU allocation (vLLM → ComfyUI → Golem)
+- **Golem Provider**: Decentralized compute sharing
+
+---
+
+## 🔧 What's Automated
+
+| Task | Frequency | Script |
+|------|-----------|--------|
+| GPU allocation (vLLM/ComfyUI) | Every 30s | GPU Scheduler (systemd) |
+| Health monitoring | Every 15 min | health-check.sh (cron) |
+| Git auto-commit | Hourly | git-autopush.sh (cron) |
+| Client provisioning | On payment | n8n workflow (Stripe webhook) |
+| Daily content generation | 10 AM daily | n8n workflow (scheduled) |
+| Golem compute sharing | 24/7 | golem-provider (systemd) |
+| Telegram alerts | Real-time | All monitoring scripts |
+
+**Zero manual intervention required after setup.**
+
+---
+
+## 💡 Revenue Streams
+
+### Month 1-2 (getting started)
+- Golem + bandwidth: R$200
+- 1 API client: R$97
+- 1 n8n project: R$800
+- Photo packages: R$450
+- **Total: ~R$1,550/month**
+
+### Month 3-6 (growing)
+- Golem + bandwidth: R$300
+- 3 API clients: R$991
+- 2 n8n retainers: R$800
+- 3 price monitors: R$891
+- Content services: R$600
+- **Total: ~R$3,576/month**
+
+### Month 6+ (autopilot)
+- Golem + bandwidth: R$400
+- 5 API clients: R$1,485
+- 3 n8n retainers: R$1,500
+- 5 monitors: R$1,485
+- Content + YouTube: R$1,300
+- **Total: ~R$6,558/month**
+
+**With less than 1 hour/week of active work** (just bringing in clients).
+
+---
+
+## 🎮 Service Management
+
+### View Status
 ```bash
-# Clean old Docker images
-docker system prune -a
-
-# Check model sizes
-du -sh infra/services/comfyui/models/*
-
-# Clean old outputs
-rm -rf infra/services/comfyui/output/old-*
+docker ps                          # Docker containers
+systemctl status gpu-scheduler     # GPU scheduler
+systemctl --user status cloudflared # Cloudflare tunnel
+nvidia-smi                         # GPU usage
 ```
 
-### Need Help?
+### View Logs
+```bash
+tail -f ~/income-services/shared/logs/health-$(date +%Y%m%d).log
+journalctl -u gpu-scheduler -f
+docker logs litellm-proxy -f
+```
 
-1. Check service-specific README in `infra/services/<service>/`
-2. Review `GUIA-COMPLETO.md` for Portuguese documentation
-3. Check health logs: `~/income-services/shared/logs/`
-
----
-
-## 🎓 Learning Path
-
-**Week 1:** Master ComfyUI basics
-- Load images, apply workflows
-- Understand nodes (Load Image → Remove BG → Save)
-- Generate 20 sample images (practice)
-
-**Week 2:** Get first clients
-- Identify 10 Mercado Livre sellers with bad photos
-- Send 10 DMs with offer
-- Close 1-2 clients
-
-**Week 3:** Optimize workflow
-- Create templates for common categories
-- Set up batch processing
-- Reduce per-image time to <2 min
-
-**Week 4:** Scale
-- Aim for 5 active clients
-- Set up recurring monthly packages
-- Consider n8n automation for intake
+### Restart Services
+```bash
+cd ~/income-services/litellm && docker compose restart
+systemctl restart gpu-scheduler
+systemctl --user restart cloudflared
+```
 
 ---
 
-## 🔐 Security Notes
+## 🔐 Security
 
-- All `.env` files are gitignored (secrets never committed)
-- Use `.env.example` as templates
-- Cloudflare Tunnel (no open ports)
-- ComfyUI has no authentication (internal only, Cloudflare for public)
+- All services behind Cloudflare Tunnel (no exposed ports)
+- Secrets in `.env` files (not in git)
+- HTTPS everywhere via Cloudflare
+- Telegram alerts for anomalies
+- Automated health checks
+
+---
+
+## 📊 Public Endpoints
+
+### Client-Facing (safe to share)
+- `https://llm.ativadata.com` - LLM API
+- `https://api.ativadata.com` - LLM API (alt)
+
+### Internal Admin (never share)
+- `https://n8n.atividata.com.br` - n8n automation
+- `https://studio.atividata.com.br` - ComfyUI
+- All other `*.atividata.com.br` subdomains
 
 ---
 
 ## 🤝 Contributing
 
-This is a personal revenue project, but you can:
-- Fork for your own setup
-- Open issues for bugs
-- Share workflow optimizations
+This is a private repository for the yuserver monetization stack. For issues or improvements:
+
+1. Open an issue
+2. Document the problem
+3. Propose a solution
 
 ---
 
-## 📄 License
+## 📝 License
 
-MIT License - Use for your own income generation
+Private repository - all rights reserved.
 
 ---
 
-**Last Updated:** 2026-04-02
-**Status:** ✅ Payment processing fully automated
-**Next Milestone:** 5 active ComfyUI clients (R$2,500/month)
+## 🆘 Support
+
+- Full deployment guide: [DEPLOY.md](DEPLOY.md)
+- Revenue guide: [GUIA-COMPLETO.md](GUIA-COMPLETO.md)
+- System reference: [.github/copilot-instructions.md](.github/copilot-instructions.md)
+
+---
+
+**Built for yuserver | Ryzen 9 9950X | RTX 3060 12GB | 60GB RAM | 2Gbps**
