@@ -21,7 +21,7 @@ Or via the deploy script:
 ```
 
 Accessible at:
-- Local: http://localhost:8080
+- Local: http://localhost:8090
 - Public: https://ativadata.com (via Cloudflare Tunnel)
 
 ## Cloudflare Tunnel
@@ -30,7 +30,7 @@ Add to `~/.cloudflared/config.yml`:
 
 ```yaml
 - hostname: ativadata.com
-  service: http://localhost:8080
+  service: http://localhost:8090
 ```
 
 Then restart the tunnel:
@@ -46,14 +46,3 @@ Edit `index.html` to update:
 - WhatsApp contact number (replace `5500000000000` with actual number)
 - Service descriptions and FAQ items
 - Brand colors and styling
-
-## Port Note
-
-The landing page uses port **8080**. If MoneyPrinter backend is also using 8080, change the port mapping in `docker-compose.yml`:
-
-```yaml
-ports:
-  - "8090:80"  # Use 8090 instead
-```
-
-And update the Cloudflare Tunnel config accordingly.
