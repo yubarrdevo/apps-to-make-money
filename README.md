@@ -30,10 +30,13 @@ apps-to-make-money/
 ├── infra/
 │   ├── services/
 │   │   ├── comfyui/          # 🎯 PRIMARY - Image generation
+│   │   ├── landing-page/     # 🌐 Client-facing website (ativadata.com)
 │   │   ├── n8n/              # Automation workflows
 │   │   └── litellm/          # Optional LLM API gateway
 │   ├── monitoring/           # Health checks, Telegram alerts
-│   └── n8n-workflows/        # Pre-built automation workflows
+│   ├── n8n-workflows/        # Pre-built automation workflows
+│   ├── PAYMENT-SETUP.md      # Payment processing setup guide
+│   └── stripe-links.md       # Stripe payment links & IDs
 ├── GUIA-COMPLETO.md         # Complete operational guide (PT-BR)
 ├── PARA-LEIGOS.md           # Non-technical explanation (PT-BR)
 └── README.md                # This file
@@ -147,8 +150,33 @@ See [`infra/services/comfyui/README.md`](infra/services/comfyui/README.md) for:
 ```
 
 **Optional Services:**
-- **n8n:** Automate client notifications, order processing
+- **n8n:** Automate client notifications, order processing, payment provisioning
 - **LiteLLM + Ollama:** Sell LLM API access (secondary revenue)
+- **Landing Page:** Client-facing website at ativadata.com with pricing & payment links
+
+---
+
+## 💳 Payment Processing
+
+Fully automated payment pipeline — zero manual intervention for API subscriptions:
+
+1. **Landing page** (ativadata.com) shows services and pricing
+2. **Stripe** processes payments via payment links
+3. **n8n** receives webhooks and provisions services automatically
+4. **Resend** sends credentials/confirmation emails
+5. **Telegram** alerts owner of new orders
+
+### Setup
+
+```bash
+# Deploy landing page
+./infra/deploy.sh landing-page
+
+# Import n8n workflows
+# See infra/PAYMENT-SETUP.md for complete instructions
+```
+
+See [`infra/PAYMENT-SETUP.md`](infra/PAYMENT-SETUP.md) for complete setup.
 
 ---
 
@@ -210,8 +238,11 @@ Telegram alerts configured in `infra/monitoring/telegram-alert.sh`
 | File | Purpose | Language |
 |------|---------|----------|
 | [`infra/services/comfyui/README.md`](infra/services/comfyui/README.md) | ComfyUI setup, client acquisition, workflows | EN |
+| [`infra/services/landing-page/README.md`](infra/services/landing-page/README.md) | Landing page deployment | EN |
 | [`infra/services/n8n/README.md`](infra/services/n8n/README.md) | n8n automation setup | EN |
 | [`infra/services/litellm/README.md`](infra/services/litellm/README.md) | LiteLLM API gateway setup | EN |
+| [`infra/PAYMENT-SETUP.md`](infra/PAYMENT-SETUP.md) | Payment processing setup guide | EN |
+| [`infra/stripe-links.md`](infra/stripe-links.md) | Stripe payment links & price IDs | EN |
 | [`GUIA-COMPLETO.md`](GUIA-COMPLETO.md) | Complete operational guide | PT-BR |
 | [`PARA-LEIGOS.md`](PARA-LEIGOS.md) | Non-technical explanation | PT-BR |
 
@@ -302,6 +333,6 @@ MIT License - Use for your own income generation
 
 ---
 
-**Last Updated:** 2026-03-28
-**Status:** ✅ Focused on ComfyUI as primary revenue
+**Last Updated:** 2026-04-02
+**Status:** ✅ Payment processing fully automated
 **Next Milestone:** 5 active ComfyUI clients (R$2,500/month)

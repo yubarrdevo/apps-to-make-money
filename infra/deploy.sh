@@ -88,10 +88,24 @@ deploy_litellm() {
   success "LiteLLM deployed → http://localhost:4000"
 }
 
+deploy_landing_page() {
+  log "Deploying landing page (ativadata.com)..."
+
+  cd "$SERVICES_DIR/landing-page"
+
+  docker compose up -d
+  success "Landing page deployed → http://localhost:8090"
+  echo "  Public: https://ativadata.com (configure Cloudflare Tunnel)"
+}
+
 show_status() {
   log "Service Status:"
   echo ""
 
+  echo "🌐 Landing Page (ativadata.com):"
+  docker ps --filter "name=landing-page" --format "  {{.Status}}" 2>/dev/null || echo "  Not running"
+
+  echo ""
   echo "🎨 ComfyUI (PRIMARY):"
   docker ps --filter "name=comfyui" --format "  {{.Status}}" 2>/dev/null || echo "  Not running"
 
@@ -119,6 +133,10 @@ show_status() {
 
 main() {
   case "${1:-}" in
+    landing-page)
+      check_deps
+      deploy_landing_page
+      ;;
     comfyui)
       check_deps
       deploy_comfyui
@@ -133,6 +151,7 @@ main() {
       ;;
     all)
       check_deps
+      deploy_landing_page
       deploy_comfyui
       deploy_n8n
       deploy_litellm
@@ -144,14 +163,15 @@ main() {
       show_status
       ;;
     *)
-      echo "Usage: $0 {comfyui|n8n|litellm|all|status}"
+      echo "Usage: $0 {landing-page|comfyui|n8n|litellm|all|status}"
       echo ""
       echo "Commands:"
-      echo "  comfyui  - Deploy ComfyUI (PRIMARY revenue service)"
-      echo "  n8n      - Deploy n8n automation platform"
-      echo "  litellm  - Deploy LiteLLM LLM API gateway"
-      echo "  all      - Deploy all services"
-      echo "  status   - Show status of all services"
+      echo "  landing-page - Deploy client-facing landing page (ativadata.com)"
+      echo "  comfyui      - Deploy ComfyUI (PRIMARY revenue service)"
+      echo "  n8n          - Deploy n8n automation platform"
+      echo "  litellm      - Deploy LiteLLM LLM API gateway"
+      echo "  all          - Deploy all services"
+      echo "  status       - Show status of all services"
       echo ""
       echo "Example:"
       echo "  $0 comfyui     # Start with the main service"
