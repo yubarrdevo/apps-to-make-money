@@ -1,0 +1,27 @@
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm
+    ports:
+      - "8002:8002"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN:-}
+    command: >
+      --model Qwen/Qwen2.5-14B-Instruct-AWQ
+      --quantization awq
+      --port 8002
+      --host 0.0.0.0
+      --max-model-len 8192
+      --gpu-memory-utilization 0.90
+      --api-key bcf27c2b3fe913e8f526af69c9f9253d4539f452dc8caec42e594d27109e4d96
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ipc: host
+    restart: unless-stopped

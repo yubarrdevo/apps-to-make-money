@@ -97,8 +97,10 @@ EOF
     # Create LiteLLM .env
     if [ ! -f "$SERVICES_DIR/litellm/.env" ]; then
         cat > "$SERVICES_DIR/litellm/.env" << EOF
-DATABASE_URL=postgresql://litellm:9a0ac34fd8e5e7a7e8ebdf53e6dadbd9@litellm-db:5432/litellm
+LITELLM_DB_PASSWORD=9a0ac34fd8e5e7a7e8ebdf53e6dadbd9
 POSTGRES_PASSWORD=9a0ac34fd8e5e7a7e8ebdf53e6dadbd9
+LITELLM_MASTER_KEY=sk-9c2d72b2b8e61d402b7316fed0276e675117cd4a1342fa572c84e7e20223c0b6
+DATABASE_URL=postgresql://litellm:9a0ac34fd8e5e7a7e8ebdf53e6dadbd9@litellm-db:5432/litellm
 EOF
         log_success "Created LiteLLM .env"
     fi
@@ -108,6 +110,7 @@ EOF
         cat > "$SERVICES_DIR/n8n/.env" << EOF
 N8N_USER=admin
 N8N_PASSWORD=1833d549f04774aa51b5c56b
+N8N_DB_PASSWORD=dcefd4c5605b426522e3cc3316fef7c8
 DB_POSTGRESDB_PASSWORD=dcefd4c5605b426522e3cc3316fef7c8
 POSTGRES_PASSWORD=dcefd4c5605b426522e3cc3316fef7c8
 N8N_ENCRYPTION_KEY=edc3fc948d0d27ed8aa1db04af452e43f6d585af61e6f47667236cc9fc685605

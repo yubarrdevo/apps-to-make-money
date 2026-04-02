@@ -1,0 +1,19 @@
+[Unit]
+Description=GPU Scheduler - Auto-manages vLLM and ComfyUI based on demand
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=yuri
+Environment="PATH=/home/yuri/.local/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/home/yuri/income-services/shared/.gpu-scheduler.env
+ExecStart=/usr/bin/python3 /home/yuri/apps-to-make-money/infra/gpu-scheduler/scheduler.py
+Restart=always
+RestartSec=15
+StandardOutput=append:/home/yuri/income-services/shared/logs/gpu-scheduler.log
+StandardError=append:/home/yuri/income-services/shared/logs/gpu-scheduler.log
+
+[Install]
+WantedBy=multi-user.target
